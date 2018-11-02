@@ -12,6 +12,7 @@ class MainActivity : AppCompatActivity() {
 
         // Example of a call to a native method
         sample_text.text = stringFromJNI()
+        deliverString("My name is AlbertSnow")
     }
 
     /**
@@ -19,6 +20,7 @@ class MainActivity : AppCompatActivity() {
      * which is packaged with this application.
      */
     external fun stringFromJNI(): String
+    external fun deliverString(text: String)
 
     companion object {
 
