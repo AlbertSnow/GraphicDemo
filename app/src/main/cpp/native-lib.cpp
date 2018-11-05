@@ -51,14 +51,25 @@ Java_com_albertsnow_graphicdemo_SecondActivity_arrayFromJNI(
 
 extern "C" JNIEXPORT void JNICALL
 Java_com_albertsnow_graphicdemo_SecondActivity_deliverArray(
-        JNIEnv* env,
+        JNIEnv *env,
         jobject /* this */,
         jintArray javaArray) {
-    jsize  size = env->GetArrayLength(javaArray);
+    jsize size = env->GetArrayLength(javaArray);
     logInt(size);
     jboolean isCopy;
-    jint* element = env->GetIntArrayElements(javaArray, &isCopy);
+    jint *element = env->GetIntArrayElements(javaArray, &isCopy);
     for (int i = 0; i < size; ++i) {
         logInt(element[i]);
     }
+    env->ReleaseIntArrayElements(javaArray, element, 0);
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_albertsnow_graphicdemo_SecondActivity_reflectObject(
+        JNIEnv *env,
+        jobject thisParam, jobject getFieldClass) {
+    jclass clazz = env->FindClass("com/albertsnow/graphicdemo/TestJNI");
+    jfieldID filedId = env->GetFieldID(clazz, "testField", "I");
+    jint filedValue = env->GetIntField(getFieldClass, filedId);
+    logInt(filedValue);
 }

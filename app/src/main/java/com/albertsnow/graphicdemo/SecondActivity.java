@@ -16,10 +16,12 @@ public class SecondActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         deliverArray(new int[]{1, 2, 3});
+        reflectObject(new TestJNI());
     }
 
     native String stringFromJNI();
     native int[] arrayFromJNI();
     native void deliverString(String string);
     native void deliverArray(int[] intData);
+    native void reflectObject(Object testJni);
 }
