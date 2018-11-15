@@ -73,3 +73,23 @@ Java_com_albertsnow_graphicdemo_SecondActivity_reflectObject(
     jint filedValue = env->GetIntField(getFieldClass, filedId);
     logInt(filedValue);
 }
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_albertsnow_graphicdemo_SecondActivity_mallocInt(
+        JNIEnv *env,
+        jobject thisParam) {
+    void *memory = malloc(1024 * 1024 * 1);
+}
+
+static jstring func1( JNIEnv* env)
+{
+    env = 0;
+    return env->NewStringUTF("hello ");
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_albertsnow_graphicdemo_SecondActivity_testException(
+        JNIEnv *env,
+        jobject thisParam) {
+    func1(env);
+}

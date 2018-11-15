@@ -3,6 +3,7 @@ package com.albertsnow.graphicdemo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 public class SecondActivity extends AppCompatActivity {
 
@@ -17,6 +18,13 @@ public class SecondActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         deliverArray(new int[]{1, 2, 3});
         reflectObject(new TestJNI());
+        findViewById(R.id.main_malloc_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mallocInt();
+            }
+        });
+
     }
 
     native String stringFromJNI();
@@ -24,4 +32,6 @@ public class SecondActivity extends AppCompatActivity {
     native void deliverString(String string);
     native void deliverArray(int[] intData);
     native void reflectObject(Object testJni);
+    native void mallocInt();
+    native void testException();
 }
