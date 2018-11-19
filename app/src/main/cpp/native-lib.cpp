@@ -93,3 +93,31 @@ Java_com_albertsnow_graphicdemo_SecondActivity_testException(
         jobject thisParam) {
     func1(env);
 }
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_albertsnow_graphicdemo_SecondActivity_writeFile(
+        JNIEnv *env,
+        jobject thisParam) {
+    FILE *stream = fopen("/sdcard/TestFile.txt", "w");
+    if (NULL == stream) {
+        logStr("file open null");
+        return;
+    }
+    logStr("file open success");
+
+    char data[] = {'h', 'e', 'l', 'l', 'o', '\n'};
+    size_t count = sizeof(data) / sizeof(data[0]);
+
+    if (count != fwrite(data, sizeof(char), count, stream)) {
+        logStr("file error");
+    }
+
+    fputs("world", stream);
+    fputc('\n', stream);
+    fprintf(stream, "\n hello %s i like this", "Albert Snow");
+
+    if (EOF == fflush(stream)) {
+        logStr("file flush error");
+    }
+
+}
