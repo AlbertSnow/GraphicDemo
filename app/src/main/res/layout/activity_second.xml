@@ -21,10 +21,16 @@
             android:text="Malloc" />
 
         <Button
-            android:id="@+id/main_file_btn"
+            android:id="@+id/main_write_file_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="WriteFile" />
+
+        <Button
+            android:id="@+id/main_read_file_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ReadFile" />
 
 
     </LinearLayout>

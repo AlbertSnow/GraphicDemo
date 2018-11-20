@@ -25,7 +25,8 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
         deliverArray(new int[]{1, 2, 3});
         reflectObject(new TestJNI());
         findViewById(R.id.main_malloc_btn).setOnClickListener(this);
-        findViewById(R.id.main_file_btn).setOnClickListener(this);
+        findViewById(R.id.main_write_file_btn).setOnClickListener(this);
+        findViewById(R.id.main_read_file_btn).setOnClickListener(this);
     }
 
     @Override
@@ -48,6 +49,7 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
     native void mallocInt();
     native void testException();
     native void writeFile();
+    native void readFile();
 
     @Override
     public void onClick(View v) {
@@ -55,8 +57,11 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.main_malloc_btn:
                 mallocInt();
                 break;
-            case R.id.main_file_btn:
+            case R.id.main_write_file_btn:
                 writeFile();
+                break;
+            case R.id.main_read_file_btn:
+                readFile();
                 break;
         }
     }

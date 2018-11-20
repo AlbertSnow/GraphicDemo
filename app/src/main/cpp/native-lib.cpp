@@ -2,7 +2,7 @@
 #include <string>
 #include <android/log.h>
 
-void logStr(const char* str) {
+void logStr(const char *str) {
     __android_log_print(ANDROID_LOG_DEBUG, "NativeTest", "logStr: %s\n", str);
 }
 
@@ -12,7 +12,7 @@ void logInt(int intData) {
 
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_albertsnow_graphicdemo_SecondActivity_stringFromJNI(
-        JNIEnv* env,
+        JNIEnv *env,
         jobject /* this */) {
     std::string hello = "Hello from C++";
     return env->NewStringUTF(hello.c_str());
@@ -20,7 +20,7 @@ Java_com_albertsnow_graphicdemo_SecondActivity_stringFromJNI(
 
 extern "C" JNIEXPORT void JNICALL
 Java_com_albertsnow_graphicdemo_SecondActivity_deliverString(
-        JNIEnv* env,
+        JNIEnv *env,
         jobject /* this */, jstring j_str) {
     jboolean isCopy;
     const char *str = env->GetStringUTFChars(j_str, &isCopy);
@@ -35,7 +35,7 @@ Java_com_albertsnow_graphicdemo_SecondActivity_deliverString(
 
 extern "C" JNIEXPORT jintArray JNICALL
 Java_com_albertsnow_graphicdemo_SecondActivity_arrayFromJNI(
-        JNIEnv* env,
+        JNIEnv *env,
         jobject /* this */) {
     int a[10] = {1, 2, 3, 4, 5};
 
@@ -81,8 +81,7 @@ Java_com_albertsnow_graphicdemo_SecondActivity_mallocInt(
     void *memory = malloc(1024 * 1024 * 1);
 }
 
-static jstring func1( JNIEnv* env)
-{
+static jstring func1(JNIEnv *env) {
     env = 0;
     return env->NewStringUTF("hello ");
 }
@@ -116,8 +115,26 @@ Java_com_albertsnow_graphicdemo_SecondActivity_writeFile(
     fputc('\n', stream);
     fprintf(stream, "\n hello %s i like this", "Albert Snow");
 
+    fclose(stream);
     if (EOF == fflush(stream)) {
         logStr("file flush error");
     }
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_albertsnow_graphicdemo_SecondActivity_readFile(
+        JNIEnv *env,
+        jobject thisParam) {
+    FILE *stream = fopen("/sdcard/TestFile.txt", "r");
+    if (NULL == stream) {
+        logStr("file open null");
+        return;
+    }
+
+    char buffer[5];
+    int count = 4;
+    fread(buffer, sizeof(char), count, stream);
+    logStr(buffer);
+
 
 }
