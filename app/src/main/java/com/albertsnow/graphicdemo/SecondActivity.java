@@ -15,6 +15,7 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
 
     static {
         System.loadLibrary("native-lib");
+        System.loadLibrary("OcrGroup");
     }
 
 
@@ -27,6 +28,7 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
         findViewById(R.id.main_malloc_btn).setOnClickListener(this);
         findViewById(R.id.main_write_file_btn).setOnClickListener(this);
         findViewById(R.id.main_read_file_btn).setOnClickListener(this);
+        findViewById(R.id.main_test_build_btn).setOnClickListener(this);
     }
 
     @Override
@@ -41,14 +43,24 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
+    native void testBuild(TestJNI[] testJNIS);
+
     native String stringFromJNI();
+
     native int[] arrayFromJNI();
+
     native void deliverString(String string);
+
     native void deliverArray(int[] intData);
+
     native void reflectObject(Object testJni);
+
     native void mallocInt();
+
     native void testException();
+
     native void writeFile();
+
     native void readFile();
 
     @Override
@@ -62,6 +74,19 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.main_read_file_btn:
                 readFile();
+                break;
+            case R.id.main_test_build_btn:
+                int i = 6;
+                TestJNI[] testJNIS = new TestJNI[i];
+                while(i-- > 0) {
+                    TestJNI item= new TestJNI();
+                    item.testField = i;
+                    item.groupId = i + 10;
+
+                    testJNIS[i] = item;
+                }
+
+                testBuild(testJNIS);
                 break;
         }
     }
