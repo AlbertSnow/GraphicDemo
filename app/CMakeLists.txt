@@ -54,3 +54,16 @@ find_library(log-lib
 target_link_libraries( # Specifies the target library.
                         OcrGroup
                        ${log-lib} )
+
+
+add_library(reference SHARED
+        src/main/cpp/ReferenceTest.cpp
+        src/main/cpp/native-lib.cpp
+        )
+
+find_library(log-lib
+        log )
+
+target_link_libraries( # Specifies the target library.
+        reference
+        ${log-lib} )
