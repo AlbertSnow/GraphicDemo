@@ -56,7 +56,7 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
     native void reflectObject(Object testJni);
 
     native void mallocInt();
-
+    native void fork();
     native void testException();
 
     native void writeFile();
