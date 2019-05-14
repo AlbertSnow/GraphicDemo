@@ -1,4 +1,5 @@
 package com.albertsnow.graphicdemo.opengl.render
 
-class Matrix44F(val data: FloatArray) {
+class Matrix44F {
+    var data: FloatArray = FloatArray(20)
 }

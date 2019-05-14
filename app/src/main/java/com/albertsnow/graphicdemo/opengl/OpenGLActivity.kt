@@ -13,10 +13,12 @@ class OpenGLActivity : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.opengl_layout)
 
-        render = OpenGLRender()
+        render = OpenGLRender(this)
 
         val glView = findViewById<GLSurfaceView>(R.id.opengl_gl_view)
+        glView.setEGLContextClientVersion(2)
         glView.setRenderer(render)
+        glView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
     }
 
 }
