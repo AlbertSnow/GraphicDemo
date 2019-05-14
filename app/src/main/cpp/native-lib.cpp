@@ -1,6 +1,8 @@
 #include <jni.h>
 #include <string>
 #include <android/log.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 void logStr(const char *str) {
     __android_log_print(ANDROID_LOG_DEBUG, "NativeTest", "logStr: %s\n", str);
@@ -80,6 +82,24 @@ Java_com_albertsnow_graphicdemo_SecondActivity_mallocInt(
         jobject thisParam) {
     void *memory = malloc(1024 * 1024 * 1);
 }
+
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_albertsnow_graphicdemo_SecondActivity_fork(
+        JNIEnv *env,
+        jobject thisParam) {
+//    void *memory = malloc(1024 * 1024 * 1);
+    pid_t pid;
+    pid = fork();
+    if (pid > 0) {
+        logStr("I am the parent");
+    } else if (!pid) {
+        logStr("I am the child process");
+    } else {
+        logStr("Some error occur");
+    }
+}
+
 
 static jstring func1(JNIEnv *env) {
     env = 0;
