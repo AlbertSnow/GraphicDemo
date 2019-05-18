@@ -10,15 +10,15 @@ import java.nio.ShortBuffer
 
 class OpenglProgram {
     private var program_box: Int = 0
-    private var pos_coord_box: Int = 0
-    private var pos_trans_box: Int = 0
-    private var pos_proj_box: Int = 0
-    private var vbo_coord_box: Int = 0
+    private var vertex_coord_location: Int = 0
+    private var camera_matrix_location: Int = 0
+    private var project_matrix_location: Int = 0
+    private var vertex_coord_buffer: Int = 0
 
-    private var vbo_texture_coord: Int = 0
+    private var texture_coord_buffer: Int = 0
 
 
-    private var vbo_faces_box: Int = 0
+    private var index_buffer: Int = 0
 
     private val box_vert = ("uniform mat4 trans;\n"
             + "uniform mat4 proj;\n"
@@ -142,29 +142,32 @@ class OpenglProgram {
     }
 
     private var textureId = -1
-    private var textLoc = -1
-    private var u_TextureUnit = -1
+    private var texture_coord_location = -1
+    private var u_sampler_2D_location = -1
 
     fun init(context: Context) {
         program_box = GLES20.glCreateProgram()
         val vertShader = GLES20.glCreateShader(GLES20.GL_VERTEX_SHADER)
+
         GLES20.glShaderSource(vertShader, box_vert)
         GLES20.glCompileShader(vertShader)
         val fragShader = GLES20.glCreateShader(GLES20.GL_FRAGMENT_SHADER)
         GLES20.glShaderSource(fragShader, box_frag)
         GLES20.glCompileShader(fragShader)
+
         GLES20.glAttachShader(program_box, vertShader)
         GLES20.glAttachShader(program_box, fragShader)
         GLES20.glLinkProgram(program_box)
         GLES20.glUseProgram(program_box)
-        pos_coord_box = GLES20.glGetAttribLocation(program_box, "coord")
-        textLoc = GLES20.glGetAttribLocation(program_box, "aTexture")
-        pos_trans_box = GLES20.glGetUniformLocation(program_box, "trans")
-        pos_proj_box = GLES20.glGetUniformLocation(program_box, "proj")
-        u_TextureUnit = GLES20.glGetUniformLocation(program_box, "u_TextureUnit")
 
-        vbo_coord_box = generateOneBuffer()
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vbo_coord_box)
+        vertex_coord_location = GLES20.glGetAttribLocation(program_box, "coord")
+        texture_coord_location = GLES20.glGetAttribLocation(program_box, "aTexture")
+        camera_matrix_location = GLES20.glGetUniformLocation(program_box, "trans")
+        project_matrix_location = GLES20.glGetUniformLocation(program_box, "proj")
+        u_sampler_2D_location = GLES20.glGetUniformLocation(program_box, "u_TextureUnit")
+
+        vertex_coord_buffer = generateOneBuffer()
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vertex_coord_buffer)
         val cube_vertices = arrayOf(
                         floatArrayOf(1.0f / 2, 1.0f / 2, 0.01f / 2),
                         floatArrayOf(1.0f / 2, -1.0f / 2, 0.01f / 2),
@@ -175,8 +178,9 @@ class OpenglProgram {
         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, cube_vertices_buffer.limit() * 4, cube_vertices_buffer, GLES20.GL_DYNAMIC_DRAW)
 
 
-        vbo_texture_coord = generateOneBuffer()
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vbo_texture_coord)
+        //bottom-left is (0,0)
+        texture_coord_buffer = generateOneBuffer()
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, texture_coord_buffer)
         val cubeTextureCoordinateData = floatArrayOf(
                 1f, 1f,
                 1f, 0f,
@@ -187,8 +191,8 @@ class OpenglProgram {
         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, texture_buffer.limit() * 4, texture_buffer, GLES20.GL_DYNAMIC_DRAW)
 
 
-        vbo_faces_box = generateOneBuffer()
-        GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, vbo_faces_box)
+        index_buffer = generateOneBuffer()
+        GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, index_buffer)
         val cube_faces = arrayOf(
                 shortArrayOf(2, 1, 0, 0, 3, 2)
                 )
@@ -202,21 +206,21 @@ class OpenglProgram {
     fun render(projectionMatrix: Matrix44F, cameraview: Matrix44F, size: Vec2F) {
         GLES20.glUseProgram(program_box)
 
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vbo_coord_box)
-        GLES20.glEnableVertexAttribArray(pos_coord_box)
-        GLES20.glVertexAttribPointer(pos_coord_box, 3, GLES20.GL_FLOAT, false, 0, 0)
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vertex_coord_buffer)
+        GLES20.glEnableVertexAttribArray(vertex_coord_location)
+        GLES20.glVertexAttribPointer(vertex_coord_location, 3, GLES20.GL_FLOAT, false, 0, 0)
 
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vbo_texture_coord)
-        GLES20.glEnableVertexAttribArray(textLoc)
-        GLES20.glVertexAttribPointer(textLoc, 2, GLES20.GL_FLOAT, false, 0, 0)
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, texture_coord_buffer)
+        GLES20.glEnableVertexAttribArray(texture_coord_location)
+        GLES20.glVertexAttribPointer(texture_coord_location, 2, GLES20.GL_FLOAT, false, 0, 0)
 
-        GLES20.glUniformMatrix4fv(pos_trans_box, 1, false, cameraview.data, 0)
-        GLES20.glUniformMatrix4fv(pos_proj_box, 1, false, projectionMatrix.data, 0)
+        GLES20.glUniformMatrix4fv(camera_matrix_location, 1, false, cameraview.data, 0)
+        GLES20.glUniformMatrix4fv(project_matrix_location, 1, false, projectionMatrix.data, 0)
 
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId)
 
-        GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, vbo_faces_box)
+        GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, index_buffer)
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, 6, GLES20.GL_UNSIGNED_SHORT, 0)
     }
 }
