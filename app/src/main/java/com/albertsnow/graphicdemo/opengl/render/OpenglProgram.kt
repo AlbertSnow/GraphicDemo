@@ -166,24 +166,23 @@ class OpenglProgram {
         vbo_coord_box = generateOneBuffer()
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vbo_coord_box)
         val cube_vertices = arrayOf(
-                /* +z */floatArrayOf(1.0f / 2, 1.0f / 2, 0.01f / 2),
+                        floatArrayOf(1.0f / 2, 1.0f / 2, 0.01f / 2),
                         floatArrayOf(1.0f / 2, -1.0f / 2, 0.01f / 2),
                         floatArrayOf(-1.0f / 2, -1.0f / 2, 0.01f / 2),
-                        floatArrayOf(-1.0f / 2, 1.0f / 2, 0.01f / 2),
-                /* -z */floatArrayOf(1.0f / 2, 1.0f / 2, -0.01f / 2),
-                        floatArrayOf(1.0f / 2, -1.0f / 2, -0.01f / 2),
-                        floatArrayOf(-1.0f / 2, -1.0f / 2, -0.01f / 2),
-                        floatArrayOf(-1.0f / 2, 1.0f / 2, -0.01f / 2))
+                        floatArrayOf(-1.0f / 2, 1.0f / 2, 0.01f / 2)
+        )
         val cube_vertices_buffer = FloatBuffer.wrap(flatten(cube_vertices))
         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, cube_vertices_buffer.limit() * 4, cube_vertices_buffer, GLES20.GL_DYNAMIC_DRAW)
 
 
         vbo_texture_coord = generateOneBuffer()
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vbo_texture_coord)
-
         val cubeTextureCoordinateData = floatArrayOf(
-                // Front face
-                0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f)
+                1f, 1f,
+                1f, 0f,
+                0f, 0f,
+                0f, 1f
+        )
         val texture_buffer = FloatBuffer.wrap(cubeTextureCoordinateData)
         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, texture_buffer.limit() * 4, texture_buffer, GLES20.GL_DYNAMIC_DRAW)
 
@@ -191,8 +190,8 @@ class OpenglProgram {
         vbo_faces_box = generateOneBuffer()
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, vbo_faces_box)
         val cube_faces = arrayOf(
-                /* +z */shortArrayOf(3, 2, 1, 0), /* -y */shortArrayOf(2, 3, 7, 6), /* +y */shortArrayOf(0, 1, 5, 4),
-                /* -x */shortArrayOf(3, 0, 4, 7), /* +x */shortArrayOf(1, 2, 6, 5), /* -z */shortArrayOf(4, 5, 6, 7))
+                shortArrayOf(2, 1, 0, 0, 3, 2)
+                )
         val cube_faces_buffer = ShortBuffer.wrap(flatten(cube_faces))
         GLES20.glBufferData(GLES20.GL_ELEMENT_ARRAY_BUFFER, cube_faces_buffer.limit() * 2, cube_faces_buffer, GLES20.GL_STATIC_DRAW)
 
@@ -201,22 +200,6 @@ class OpenglProgram {
 
 
     fun render(projectionMatrix: Matrix44F, cameraview: Matrix44F, size: Vec2F) {
-        val size0 = size.data[0]
-        val size1 = size.data[1]
-
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vbo_coord_box)
-        val height = size0 / 1000
-        val cube_vertices = arrayOf(
-                floatArrayOf(size0 / 2, size1 / 2, height / 2),
-                floatArrayOf(size0 / 2, -size1 / 2, height / 2),
-                floatArrayOf(-size0 / 2, -size1 / 2, height / 2),
-                floatArrayOf(-size0 / 2, size1 / 2, height / 2))
-        val cube_vertices_buffer = FloatBuffer.wrap(flatten(cube_vertices))
-        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, cube_vertices_buffer.limit() * 4, cube_vertices_buffer, GLES20.GL_DYNAMIC_DRAW)
-
-        GLES20.glEnable(GLES20.GL_BLEND)
-        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA)
-        GLES20.glEnable(GLES20.GL_DEPTH_TEST)
         GLES20.glUseProgram(program_box)
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vbo_coord_box)
@@ -227,7 +210,6 @@ class OpenglProgram {
         GLES20.glEnableVertexAttribArray(textLoc)
         GLES20.glVertexAttribPointer(textLoc, 2, GLES20.GL_FLOAT, false, 0, 0)
 
-
         GLES20.glUniformMatrix4fv(pos_trans_box, 1, false, cameraview.data, 0)
         GLES20.glUniformMatrix4fv(pos_proj_box, 1, false, projectionMatrix.data, 0)
 
@@ -235,6 +217,6 @@ class OpenglProgram {
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId)
 
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, vbo_faces_box)
-        GLES20.glDrawElements(GLES20.GL_TRIANGLE_FAN, 4, GLES20.GL_UNSIGNED_SHORT, 0)
+        GLES20.glDrawElements(GLES20.GL_TRIANGLES, 6, GLES20.GL_UNSIGNED_SHORT, 0)
     }
 }

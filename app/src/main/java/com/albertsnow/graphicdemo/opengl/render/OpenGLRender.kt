@@ -47,7 +47,7 @@ class OpenGLRender(var context: Context) : GLSurfaceView.Renderer {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT)
 
 //        // Set the camera position (View matrix)
-//        Matrix.setLookAtM(cameraMatrix.data, 0, 0f, 0f, -3f, 0f, 0f, 0f, 0f, 1.0f, 0.0f)
+        Matrix.setLookAtM(cameraMatrix.data, 0, 0f, 0f, -3f, 0f, 0f, 0f, 0f, 1.0f, 0.0f)
 
         program.render(projectionMatrix = projectionMatrix,
                 cameraview = cameraMatrix,
