@@ -4,12 +4,14 @@ import android.content.Context
 import android.opengl.GLES20
 import com.albertsnow.graphicdemo.R
 import com.albertsnow.graphicdemo.opengl.utils.TextureHelper
+import com.albertsnow.graphicdemo.opengl.utils.flatten
+import com.albertsnow.graphicdemo.opengl.utils.generateOneBuffer
 import java.nio.FloatBuffer
 import java.nio.ShortBuffer
 
 
-class OpenglProgram {
-    private var program_box: Int = 0
+class OpenglProgram : AbsOpenGLProgram() {
+
     private var vertex_coord_location: Int = 0
     private var camera_matrix_location: Int = 0
     private var project_matrix_location: Int = 0
@@ -45,126 +47,27 @@ class OpenglProgram {
             + "}\n"
             + "\n")
 
-    private fun flatten(a: Array<FloatArray>): FloatArray {
-        var size = 0
-        run {
-            var k = 0
-            while (k < a.size) {
-                size += a[k].size
-                k += 1
-            }
-        }
-        val l = FloatArray(size)
-        var offset = 0
-        var k = 0
-        while (k < a.size) {
-            System.arraycopy(a[k], 0, l, offset, a[k].size)
-            offset += a[k].size
-            k += 1
-        }
-        return l
-    }
-
-    private fun flatten(a: Array<IntArray>): IntArray {
-        var size = 0
-        run {
-            var k = 0
-            while (k < a.size) {
-                size += a[k].size
-                k += 1
-            }
-        }
-        val l = IntArray(size)
-        var offset = 0
-        var k = 0
-        while (k < a.size) {
-            System.arraycopy(a[k], 0, l, offset, a[k].size)
-            offset += a[k].size
-            k += 1
-        }
-        return l
-    }
-
-    private fun flatten(a: Array<ShortArray>): ShortArray {
-        var size = 0
-        run {
-            var k = 0
-            while (k < a.size) {
-                size += a[k].size
-                k += 1
-            }
-        }
-        val l = ShortArray(size)
-        var offset = 0
-        var k = 0
-        while (k < a.size) {
-            System.arraycopy(a[k], 0, l, offset, a[k].size)
-            offset += a[k].size
-            k += 1
-        }
-        return l
-    }
-
-    private fun flatten(a: Array<ByteArray>): ByteArray {
-        var size = 0
-        run {
-            var k = 0
-            while (k < a.size) {
-                size += a[k].size
-                k += 1
-            }
-        }
-        val l = ByteArray(size)
-        var offset = 0
-        var k = 0
-        while (k < a.size) {
-            System.arraycopy(a[k], 0, l, offset, a[k].size)
-            offset += a[k].size
-            k += 1
-        }
-        return l
-    }
-
-    private fun byteArrayFromIntArray(a: IntArray): ByteArray {
-        val l = ByteArray(a.size)
-        var k = 0
-        while (k < a.size) {
-            l[k] = (a[k] and 0xFF).toByte()
-            k += 1
-        }
-        return l
-    }
-
-    private fun generateOneBuffer(): Int {
-        val buffer = intArrayOf(0)
-        GLES20.glGenBuffers(1, buffer, 0)
-        return buffer[0]
-    }
-
     private var textureId = -1
     private var texture_coord_location = -1
     private var u_sampler_2D_location = -1
 
-    fun init(context: Context) {
-        program_box = GLES20.glCreateProgram()
-        val vertShader = GLES20.glCreateShader(GLES20.GL_VERTEX_SHADER)
+    override fun getVertexShaderSource(): String {
+        return box_vert
+    }
 
-        GLES20.glShaderSource(vertShader, box_vert)
-        GLES20.glCompileShader(vertShader)
-        val fragShader = GLES20.glCreateShader(GLES20.GL_FRAGMENT_SHADER)
-        GLES20.glShaderSource(fragShader, box_frag)
-        GLES20.glCompileShader(fragShader)
+    override fun getFragmentShaderSource(): String {
+        return box_frag
+    }
 
-        GLES20.glAttachShader(program_box, vertShader)
-        GLES20.glAttachShader(program_box, fragShader)
-        GLES20.glLinkProgram(program_box)
-        GLES20.glUseProgram(program_box)
 
-        vertex_coord_location = GLES20.glGetAttribLocation(program_box, "coord")
-        texture_coord_location = GLES20.glGetAttribLocation(program_box, "aTexture")
-        camera_matrix_location = GLES20.glGetUniformLocation(program_box, "trans")
-        project_matrix_location = GLES20.glGetUniformLocation(program_box, "proj")
-        u_sampler_2D_location = GLES20.glGetUniformLocation(program_box, "u_TextureUnit")
+    override fun initProgram(context: Context) {
+        super.initProgram(context)
+
+        vertex_coord_location = GLES20.glGetAttribLocation(programPointer, "coord")
+        texture_coord_location = GLES20.glGetAttribLocation(programPointer, "aTexture")
+        camera_matrix_location = GLES20.glGetUniformLocation(programPointer, "trans")
+        project_matrix_location = GLES20.glGetUniformLocation(programPointer, "proj")
+        u_sampler_2D_location = GLES20.glGetUniformLocation(programPointer, "u_TextureUnit")
 
         vertex_coord_buffer = generateOneBuffer()
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vertex_coord_buffer)
@@ -203,8 +106,8 @@ class OpenglProgram {
     }
 
 
-    fun render(projectionMatrix: Matrix44F, cameraview: Matrix44F, size: Vec2F) {
-        GLES20.glUseProgram(program_box)
+    override fun draw(projectionMatrix: Matrix44F, cameraview: Matrix44F, size: Vec2F) {
+        GLES20.glUseProgram(programPointer)
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vertex_coord_buffer)
         GLES20.glEnableVertexAttribArray(vertex_coord_location)

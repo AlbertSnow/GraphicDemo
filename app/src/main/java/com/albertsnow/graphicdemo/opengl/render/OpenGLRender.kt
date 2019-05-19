@@ -22,9 +22,8 @@ class OpenGLRender(var context: Context) : GLSurfaceView.Renderer {
 
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f)
-
         Matrix.setLookAtM(cameraMatrix.data, 0, 0f, 0f, -3f, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
-        program.init(context)
+        program.initProgram(context)
     }
 
 
@@ -49,7 +48,7 @@ class OpenGLRender(var context: Context) : GLSurfaceView.Renderer {
 //        // Set the camera position (View matrix)
         Matrix.setLookAtM(cameraMatrix.data, 0, 0f, 0f, -3f, 0f, 0f, 0f, 0f, 1.0f, 0.0f)
 
-        program.render(projectionMatrix = projectionMatrix,
+        program.draw(projectionMatrix = projectionMatrix,
                 cameraview = cameraMatrix,
                 size = size)
     }
