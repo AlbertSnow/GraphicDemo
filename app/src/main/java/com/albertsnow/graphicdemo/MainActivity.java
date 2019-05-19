@@ -1,5 +1,6 @@
 package com.albertsnow.graphicdemo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,8 +13,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.albertsnow.graphicdemo.jni.TestReference;
+import com.albertsnow.graphicdemo.opengl.MultiTextureActivity;
+import com.albertsnow.graphicdemo.opengl.OpenGLActivity;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -44,6 +50,30 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         new TestReference().main(new String[]{"hello", "EveryOne"});
+        initView();
+    }
+
+    private void initView() {
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.activity_list, android.R.layout.simple_spinner_item);
+        ListView listView = findViewById(R.id.main_list_view);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent();
+                switch (position) {
+
+                    case 0:
+                        intent.setClass(MainActivity.this, OpenGLActivity.class);
+                        break;
+                    case 1:
+                        intent.setClass(MainActivity.this, MultiTextureActivity.class);
+                        break;
+                }
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
