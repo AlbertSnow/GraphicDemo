@@ -8,13 +8,12 @@ import com.albertsnow.graphicdemo.opengl.shape.Triangle
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class OpenGLRender(var context: Context) : GLSurfaceView.Renderer {
+class OpenGLRender(var context: Context, val program: AbsOpenGLProgram = OpenglProgram()) : GLSurfaceView.Renderer {
 
     private lateinit var size : Vec2F
 
     private var mWidth: Int = 0
     private var mHeight: Int = 0
-    private val program : OpenglProgram = OpenglProgram()
 
     private val projectionMatrix = Matrix44F()
     private val cameraMatrix = Matrix44F()

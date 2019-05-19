@@ -10,6 +10,10 @@ import android.opengl.GLUtils
 object TextureHelper {
 
     fun loadTexture(context: Context, resId: Int): Int {
+        return TextureHelper.loadTexture(false, context, resId)
+    }
+
+    fun loadTexture(useMipMap: Boolean, context: Context, resId: Int): Int {
         val textureObjIds = IntArray(1)
         GLES20.glGenTextures(1, textureObjIds, 0)
         if (textureObjIds[0] == 0) {
@@ -23,11 +27,23 @@ object TextureHelper {
             return 0
         }
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureObjIds[0])//bind
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR_MIPMAP_LINEAR)
+
+
+        if (useMipMap) {
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR_MIPMAP_LINEAR)
+        } else {
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR)
+        }
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR)
+
+
         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0)
         bitmap.recycle()
-        GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D)
+
+        if (useMipMap) {
+            GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D)
+        }
+
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0)//unbind
         return textureObjIds[0]
     }
