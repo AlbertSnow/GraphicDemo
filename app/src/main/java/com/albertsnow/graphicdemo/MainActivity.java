@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.albertsnow.graphicdemo.camera.CameraActivity;
 import com.albertsnow.graphicdemo.jni.TestReference;
 import com.albertsnow.graphicdemo.opengl.MultiTextureActivity;
 import com.albertsnow.graphicdemo.opengl.OpenGLActivity;
@@ -69,6 +70,9 @@ public class MainActivity extends AppCompatActivity
                         break;
                     case 1:
                         intent.setClass(MainActivity.this, MultiTextureActivity.class);
+                        break;
+                    case 2:
+                        intent.setClass(MainActivity.this, CameraActivity.class);
                         break;
                 }
                 startActivity(intent);
