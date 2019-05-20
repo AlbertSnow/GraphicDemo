@@ -27,7 +27,9 @@ class CameraActivity : Activity(), SurfaceHolder.Callback, SurfaceTexture.OnFram
 
     private var mCamera: Camera? = null
     private lateinit var mCameraTextureProgram: CameraTextureGLProgram
-    private lateinit var cameraTexture: SurfaceTexture
+    private lateinit var mCameraTexture: SurfaceTexture
+
+    private val mTmpMatrix = FloatArray(16)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +65,7 @@ class CameraActivity : Activity(), SurfaceHolder.Callback, SurfaceTexture.OnFram
         if (mCamera != null) {
             Log.d(TAG, "starting camera preview")
             try {
-                mCamera!!.setPreviewTexture(cameraTexture)
+                mCamera!!.setPreviewTexture(mCameraTexture)
             } catch (ioe: IOException) {
                 throw RuntimeException(ioe)
             }
@@ -147,13 +149,17 @@ class CameraActivity : Activity(), SurfaceHolder.Callback, SurfaceTexture.OnFram
 
     override fun surfaceCreated(holder: SurfaceHolder?) {
         val textureId = mCameraTextureProgram.createTextureObject(GLES11Ext.GL_TEXTURE_EXTERNAL_OES)
-        cameraTexture = SurfaceTexture(textureId)
-        cameraTexture.setOnFrameAvailableListener(this)
+        mCameraTexture = SurfaceTexture(textureId)
+        mCameraTexture.setOnFrameAvailableListener(this)
         startPreview()
     }
 
     override fun onFrameAvailable(surfaceTexture: SurfaceTexture?) {
-
+        runOnUiThread {
+            drawFrame()
+        }
+//        mCameraTexture.updateTexImage()
+//        mCameraTexture.getTransformMatrix(mTmpMatrix)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -166,6 +172,25 @@ class CameraActivity : Activity(), SurfaceHolder.Callback, SurfaceTexture.OnFram
         } else {
             openCamera(VIDEO_WIDTH, VIDEO_HEIGHT, DESIRED_PREVIEW_FPS)
         }
+    }
+
+    /**
+     * Draws a frame onto the SurfaceView and the encoder surface.
+     *
+     *
+     * This will be called whenever we get a new preview frame from the camera.  This runs
+     * on the UI thread, which ordinarily isn't a great idea -- you really want heavy work
+     * to be on a different thread -- but we're really just throwing a few things at the GPU.
+     * The upside is that we don't have to worry about managing state changes between threads.
+     *
+     *
+     * If there was a pending frame available notification when we shut down, we might get
+     * here after onPause().
+     */
+    private fun drawFrame() {
+        // Latch the next frame from the camera.
+        mCameraTexture.updateTexImage()
+        mCameraTexture.getTransformMatrix(mTmpMatrix)
     }
 
 }
