@@ -39,7 +39,7 @@ class CameraTextureGLProgram : AbsOpenGLProgram() {
             + "precision highp float;\n"
             + "#endif\n"
             + "varying vec2 vtexture;\n"
-            + "uniform sampler2D u_TextureUnit;\n"
+            + "uniform samplerExternalOES u_TextureUnit;\n"
             + "\n"
             + "void main(void)\n"
             + "{\n"

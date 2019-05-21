@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.SurfaceTexture
 import android.hardware.Camera
-import android.opengl.GLES11Ext
 import android.os.Bundle
 import android.util.Log
 import android.view.Surface
@@ -13,6 +12,9 @@ import android.view.SurfaceView
 import android.view.WindowManager
 import android.widget.Toast
 import com.albertsnow.graphicdemo.R
+import com.albertsnow.graphicdemo.opengl.EglCore
+import com.albertsnow.graphicdemo.opengl.WindowSurface
+import com.albertsnow.graphicdemo.opengl.render.CameraOpenGLRender
 import com.albertsnow.graphicdemo.opengl.render.CameraTextureGLProgram
 import com.albertsnow.graphicdemo.opengl.utils.CameraUtils
 import com.albertsnow.graphicdemo.opengl.utils.PermissionHelper
@@ -26,18 +28,17 @@ class CameraActivity : Activity(), SurfaceHolder.Callback, SurfaceTexture.OnFram
     private val DESIRED_PREVIEW_FPS = 15
 
     private var mCamera: Camera? = null
-    private lateinit var mCameraTextureProgram: CameraTextureGLProgram
     private lateinit var mCameraTexture: SurfaceTexture
 
     private val mTmpMatrix = FloatArray(16)
 
+    private lateinit var render: CameraOpenGLRender
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.camera_activity)
+        render = CameraOpenGLRender(this, CameraTextureGLProgram())
         val surfaceView = findViewById<SurfaceView>(R.id.camera_surface_view)
-
-        mCameraTextureProgram = CameraTextureGLProgram()
-
         surfaceView.holder.addCallback(this)
     }
 
@@ -140,24 +141,33 @@ class CameraActivity : Activity(), SurfaceHolder.Callback, SurfaceTexture.OnFram
     override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
         Log.d(TAG, "surfaceChanged fmt=" + format + " size=" + width + "x" + height +
                 " holder=" + holder)
+        render.onSurfaceChanged(width, height)
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder?) {
         Log.d(TAG, "surfaceDestroyed holder=$holder")
+//        render.ons
     }
 
 
+    private lateinit var mEglCore: EglCore
+
+    private lateinit var mDisplaySurface: WindowSurface
+
     override fun surfaceCreated(holder: SurfaceHolder?) {
-        val textureId = mCameraTextureProgram.createTextureObject(GLES11Ext.GL_TEXTURE_EXTERNAL_OES)
+        mEglCore = EglCore(null, EglCore.FLAG_RECORDABLE)
+        mDisplaySurface = WindowSurface(mEglCore, holder?.surface, false)
+        mDisplaySurface.makeCurrent()
+
+        render.onSurfaceCreated()
+        val textureId = render.createTextureObject()
         mCameraTexture = SurfaceTexture(textureId)
         mCameraTexture.setOnFrameAvailableListener(this)
         startPreview()
     }
 
     override fun onFrameAvailable(surfaceTexture: SurfaceTexture?) {
-        runOnUiThread {
             drawFrame()
-        }
 //        mCameraTexture.updateTexImage()
 //        mCameraTexture.getTransformMatrix(mTmpMatrix)
     }
@@ -189,8 +199,18 @@ class CameraActivity : Activity(), SurfaceHolder.Callback, SurfaceTexture.OnFram
      */
     private fun drawFrame() {
         // Latch the next frame from the camera.
+        if (mEglCore == null) {
+
+            return
+        }
+
+        mDisplaySurface.makeCurrent()
         mCameraTexture.updateTexImage()
         mCameraTexture.getTransformMatrix(mTmpMatrix)
+
+        render.onDrawFrame()
+
+        mDisplaySurface.swapBuffers()
     }
 
 }
