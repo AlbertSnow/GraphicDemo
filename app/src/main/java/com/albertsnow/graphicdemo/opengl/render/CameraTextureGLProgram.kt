@@ -48,7 +48,7 @@ class CameraTextureGLProgram : AbsOpenGLProgram() {
 //                    + "     gl_FragColor  = texture2D(u_TextureUnit,vtexture);\n"
                     + "     vec4 camera_preview = texture2D(u_TextureUnit,vtexture);\n"
                     + "     vec4 overlay_color = texture2D(u_overlay,vtexture);\n"
-                    + "     gl_FragColor = camera_preview + vec4(0.8, 0.0, 0.0, 0.0);\n"
+                    + "     gl_FragColor = camera_preview * 0.7 + overlay_color * 0.3;\n"
 //                    + "     gl_FragColor = overlay_color;\n"
                     + "}\n"
                     + "\n")
@@ -86,9 +86,9 @@ class CameraTextureGLProgram : AbsOpenGLProgram() {
         project_matrix_location = GLES20.glGetUniformLocation(programPointer, "proj")
         GlUtil.checkLocation(project_matrix_location, "proj")
         u_sampler_2D_location = GLES20.glGetUniformLocation(programPointer, "u_TextureUnit")
-//        GlUtil.checkLocation(u_sampler_2D_location, "u_TextureUnit")
+        GlUtil.checkLocation(u_sampler_2D_location, "u_TextureUnit")
         u_overlay_location = GLES20.glGetUniformLocation(programPointer, "u_overlay")
-//        GlUtil.checkLocation(u_overlay_location, "u_overlay")
+        GlUtil.checkLocation(u_overlay_location, "u_overlay")
 
         vertex_coord_buffer = generateOneBuffer()
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vertex_coord_buffer)
@@ -123,11 +123,9 @@ class CameraTextureGLProgram : AbsOpenGLProgram() {
         val cube_faces_buffer = ShortBuffer.wrap(flatten(cube_faces))
         GLES20.glBufferData(GLES20.GL_ELEMENT_ARRAY_BUFFER, cube_faces_buffer.limit() * 2, cube_faces_buffer, GLES20.GL_STATIC_DRAW)
 
-        externalTextureId = createExternalTexture()
         overlayTextureId = createResourceTexture(R.drawable.flower)
-
-        GLES20.glUniform1i(u_sampler_2D_location, externalTextureId)
-        GLES20.glUniform1i(u_overlay_location, overlayTextureId)
+        externalTextureId = createExternalTexture()
+        GlUtil.checkGlError("createExternalTexture")
     }
 
 
@@ -145,6 +143,13 @@ class CameraTextureGLProgram : AbsOpenGLProgram() {
         GLES20.glUniformMatrix4fv(camera_matrix_location, 1, false, cameraview.data, 0)
         GLES20.glUniformMatrix4fv(project_matrix_location, 1, false, projectionMatrix.data, 0)
 
+//        GlUtil.checkGlError("glUniform2 location: "  + u_overlay_location + " value: " + overlayTextureId)
+
+        GLES20.glUniform1i(u_sampler_2D_location, 0)
+        GlUtil.checkGlError("u_sampler_2D_location")
+        GLES20.glUniform1i(u_overlay_location, 1)
+        GlUtil.checkGlError("u_overlay_location")
+
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, index_buffer)
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, 6, GLES20.GL_UNSIGNED_SHORT, 0)
     }
@@ -155,6 +160,7 @@ class CameraTextureGLProgram : AbsOpenGLProgram() {
         GlUtil.checkGlError("glGenTextures")
 
         val texId = textures[0]
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
         GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, texId)
         GlUtil.checkGlError("glBindTexture $texId")
 
@@ -173,7 +179,7 @@ class CameraTextureGLProgram : AbsOpenGLProgram() {
 
     fun createResourceTexture(drawableId: Int): Int {
         var textureId = TextureHelper.loadTexture(mContext, drawableId)
-        GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE1)
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId)
         GlUtil.checkGlError("GL_TEXTURE_2D")
 
