@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity
 
     private void initView() {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.activity_list, android.R.layout.simple_spinner_item);
+                R.array.activity_list, android.R.layout.simple_list_item_1);
         ListView listView = findViewById(R.id.main_list_view);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
