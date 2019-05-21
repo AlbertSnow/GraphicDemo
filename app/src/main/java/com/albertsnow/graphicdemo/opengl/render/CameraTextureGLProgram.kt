@@ -35,9 +35,9 @@ class CameraTextureGLProgram : AbsOpenGLProgram() {
             + "}\n"
             + "\n")
 
-    private val box_frag = ("#ifdef GL_ES\n"
-            + "precision highp float;\n"
-            + "#endif\n"
+    private val box_frag = (
+            "#extension GL_OES_EGL_image_external : require\n"
+            + "precision mediump float;\n"
             + "varying vec2 vtexture;\n"
             + "uniform samplerExternalOES u_TextureUnit;\n"
             + "\n"
@@ -68,10 +68,15 @@ class CameraTextureGLProgram : AbsOpenGLProgram() {
         mContext = context
 
         vertex_coord_location = GLES20.glGetAttribLocation(programPointer, "coord")
+        GlUtil.checkLocation(vertex_coord_location, "coord")
         texture_coord_location = GLES20.glGetAttribLocation(programPointer, "aTexture")
+        GlUtil.checkLocation(texture_coord_location, "aTexture")
         camera_matrix_location = GLES20.glGetUniformLocation(programPointer, "trans")
+        GlUtil.checkLocation(camera_matrix_location, "trans")
         project_matrix_location = GLES20.glGetUniformLocation(programPointer, "proj")
+        GlUtil.checkLocation(project_matrix_location, "proj")
         u_sampler_2D_location = GLES20.glGetUniformLocation(programPointer, "u_TextureUnit")
+        GlUtil.checkLocation(u_sampler_2D_location, "u_TextureUnit")
 
         vertex_coord_buffer = generateOneBuffer()
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vertex_coord_buffer)

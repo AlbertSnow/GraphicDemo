@@ -5,7 +5,7 @@ import android.opengl.GLES11Ext
 import android.opengl.GLES20
 import android.opengl.Matrix
 import com.albertsnow.graphicdemo.opengl.shape.Triangle
-import javax.microedition.khronos.opengles.GL10
+import com.albertsnow.graphicdemo.opengl.utils.GlUtil
 
 class CameraOpenGLRender(var context: Context, val program: CameraTextureGLProgram) {
 
@@ -42,9 +42,11 @@ class CameraOpenGLRender(var context: Context, val program: CameraTextureGLProgr
 
      fun onDrawFrame() {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT)
+        GlUtil.checkGlError("glClear")
 
 //        // Set the camera position (View matrix)
         Matrix.setLookAtM(cameraMatrix.data, 0, 0f, 0f, -3f, 0f, 0f, 0f, 0f, 1.0f, 0.0f)
+        GlUtil.checkGlError("setLookAtM")
 
         program.draw(projectionMatrix = projectionMatrix,
                 cameraview = cameraMatrix,
