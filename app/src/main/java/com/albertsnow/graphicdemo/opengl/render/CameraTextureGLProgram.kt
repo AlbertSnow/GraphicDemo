@@ -31,27 +31,34 @@ class CameraTextureGLProgram : AbsOpenGLProgram() {
             + "void main()\n"
             + "{\n"
             + "    vtexture = aTexture;\n"
+//            + "    vtexture = vec2(aTexture.x, 1 - aTexture.y);\n"
             + "    gl_Position = proj*trans*coord;\n"
             + "}\n"
             + "\n")
 
     private val box_frag = (
             "#extension GL_OES_EGL_image_external : require\n"
-            + "precision mediump float;\n"
-            + "varying vec2 vtexture;\n"
-            + "uniform samplerExternalOES u_TextureUnit;\n"
-            + "\n"
-            + "void main(void)\n"
-            + "{\n"
-            + "     gl_FragColor=texture2D(u_TextureUnit,vtexture);\n"
-            + "}\n"
-            + "\n")
+                    + "precision mediump float;\n"
+                    + "varying vec2 vtexture;\n"
+                    + "uniform samplerExternalOES u_TextureUnit;\n"
+                    + "uniform sampler2D u_overlay;\n"
+                    + "\n"
+                    + "void main(void)\n"
+                    + "{\n"
+//                    + "     gl_FragColor  = texture2D(u_overlay,vtexture) ;\n"
+                    + "     gl_FragColor  = texture2D(u_TextureUnit,vtexture) ;\n"
+//                    + "     vec4 camera_preview = texture2D(u_TextureUnit,vtexture) \n"
+//                    + "     vec4 overlay_color = texture2D(u_overlay,vtexture);\n"
+//                    + "     gl_FragColor = camera_preview * (overlay_color + 0.25);\n"
+//                    + "     gl_FragColor = overlay_color;\n"
+                    + "}\n"
+                    + "\n")
 
     private var texture_coord_location = -1
     private var u_sampler_2D_location = -1
-    private var countDown = 0
+    private var u_overlay_location = -1
 
-    private lateinit var mContext : Context
+    private lateinit var mContext: Context
 
 
     override fun getVertexShaderSource(): String {
@@ -62,6 +69,10 @@ class CameraTextureGLProgram : AbsOpenGLProgram() {
         return box_frag
     }
 
+
+    public var externalTextureId: Int = 0
+
+    private var overlayTextureId: Int = 0
 
     override fun initProgram(context: Context) {
         super.initProgram(context)
@@ -76,15 +87,17 @@ class CameraTextureGLProgram : AbsOpenGLProgram() {
         project_matrix_location = GLES20.glGetUniformLocation(programPointer, "proj")
         GlUtil.checkLocation(project_matrix_location, "proj")
         u_sampler_2D_location = GLES20.glGetUniformLocation(programPointer, "u_TextureUnit")
-        GlUtil.checkLocation(u_sampler_2D_location, "u_TextureUnit")
+//        GlUtil.checkLocation(u_sampler_2D_location, "u_TextureUnit")
+        u_overlay_location = GLES20.glGetUniformLocation(programPointer, "u_overlay")
+//        GlUtil.checkLocation(u_overlay_location, "u_overlay")
 
         vertex_coord_buffer = generateOneBuffer()
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vertex_coord_buffer)
         val cube_vertices = arrayOf(
-                floatArrayOf(1.0f / 2, 1.0f / 2, 0.01f / 2),
-                floatArrayOf(1.0f / 2, -1.0f / 2, 0.01f / 2),
                 floatArrayOf(-1.0f / 2, -1.0f / 2, 0.01f / 2),
-                floatArrayOf(-1.0f / 2, 1.0f / 2, 0.01f / 2)
+                floatArrayOf(-1.0f / 2, 1.0f / 2, 0.01f / 2),
+                floatArrayOf(1.0f / 2, 1.0f / 2, 0.01f / 2),
+                floatArrayOf(1.0f / 2, -1.0f / 2, 0.01f / 2)
         )
         val cube_vertices_buffer = FloatBuffer.wrap(flatten(cube_vertices))
         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, cube_vertices_buffer.limit() * 4, cube_vertices_buffer, GLES20.GL_DYNAMIC_DRAW)
@@ -110,6 +123,12 @@ class CameraTextureGLProgram : AbsOpenGLProgram() {
         )
         val cube_faces_buffer = ShortBuffer.wrap(flatten(cube_faces))
         GLES20.glBufferData(GLES20.GL_ELEMENT_ARRAY_BUFFER, cube_faces_buffer.limit() * 2, cube_faces_buffer, GLES20.GL_STATIC_DRAW)
+
+        externalTextureId = createExternalTexture()
+        overlayTextureId = createResourceTexture(R.drawable.flower)
+
+        GLES20.glUniform1i(u_sampler_2D_location, externalTextureId)
+        GLES20.glUniform1i(u_overlay_location, overlayTextureId)
     }
 
 
@@ -127,37 +146,17 @@ class CameraTextureGLProgram : AbsOpenGLProgram() {
         GLES20.glUniformMatrix4fv(camera_matrix_location, 1, false, cameraview.data, 0)
         GLES20.glUniformMatrix4fv(project_matrix_location, 1, false, projectionMatrix.data, 0)
 
-        handleTexture()
-
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, index_buffer)
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, 6, GLES20.GL_UNSIGNED_SHORT, 0)
     }
 
-    private fun handleTexture() {
-        var resId = 0
-        if (countDown > 20) {
-            resId = R.drawable.fix_motor
-        } else {
-            resId = R.drawable.flower
-        }
-        var textureId = TextureHelper.loadTexture(mContext, resId)
-        GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId)
-
-        countDown++
-        if (countDown > 40) {
-            countDown = 0
-        }
-    }
-
-
-    fun createTextureObject(textureTarget : Int): Int {
+    fun createExternalTexture(): Int {
         val textures = IntArray(1)
         GLES20.glGenTextures(1, textures, 0)
         GlUtil.checkGlError("glGenTextures")
 
         val texId = textures[0]
-        GLES20.glBindTexture(textureTarget, texId)
+        GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, texId)
         GlUtil.checkGlError("glBindTexture $texId")
 
         GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, GLES20.GL_TEXTURE_MIN_FILTER,
@@ -172,5 +171,16 @@ class CameraTextureGLProgram : AbsOpenGLProgram() {
 
         return texId
     }
+
+    fun createResourceTexture(drawableId: Int): Int {
+        var textureId = TextureHelper.loadTexture(mContext, drawableId)
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId)
+        GlUtil.checkGlError("GL_TEXTURE_2D")
+
+        return textureId
+    }
+
+
 
 }

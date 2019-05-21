@@ -160,8 +160,7 @@ class CameraActivity : Activity(), SurfaceHolder.Callback, SurfaceTexture.OnFram
         mDisplaySurface.makeCurrent()
 
         render.onSurfaceCreated()
-        val textureId = render.createTextureObject()
-        mCameraTexture = SurfaceTexture(textureId)
+        mCameraTexture = SurfaceTexture(render.program.externalTextureId)
         mCameraTexture.setOnFrameAvailableListener(this)
         startPreview()
     }

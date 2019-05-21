@@ -53,9 +53,4 @@ class CameraOpenGLRender(var context: Context, val program: CameraTextureGLProgr
                 size = size)
     }
 
-    fun createTextureObject() : Int{
-        return program.createTextureObject(GLES11Ext.GL_TEXTURE_EXTERNAL_OES)
-    }
-
-
 }
