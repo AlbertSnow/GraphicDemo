@@ -11,6 +11,6 @@
     <string-array name="activity_list">
         <item>OpenGL Load Texture</item>
         <item>OpenGL Load Two Texture</item>
-        <item>Camera SurfaceTexture</item>
+        <item>Camera Merge Preview With Overlay Texture</item>
     </string-array>
 </resources>
