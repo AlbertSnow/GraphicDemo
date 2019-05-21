@@ -44,12 +44,9 @@ class CameraTextureGLProgram : AbsOpenGLProgram() {
                     + "\n"
                     + "void main(void)\n"
                     + "{\n"
-//                    + "     gl_FragColor  = texture2D(u_overlay,vtexture);\n"
-//                    + "     gl_FragColor  = texture2D(u_TextureUnit,vtexture);\n"
                     + "     vec4 camera_preview = texture2D(u_TextureUnit,vtexture);\n"
                     + "     vec4 overlay_color = texture2D(u_overlay,vtexture);\n"
                     + "     gl_FragColor = camera_preview * 0.7 + overlay_color * 0.3;\n"
-//                    + "     gl_FragColor = overlay_color;\n"
                     + "}\n"
                     + "\n")
 
