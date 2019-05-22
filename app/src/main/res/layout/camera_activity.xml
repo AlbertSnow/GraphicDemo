@@ -9,4 +9,21 @@
         android:id="@+id/camera_surface_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <Button
+        android:id="@+id/camera_save_bitmap_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Capture Frame"
+        />
+
+
+    <ImageView
+        android:id="@+id/camera_frame_image_view"
+        android:layout_gravity="bottom"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/fix_motor"
+        />
+
 </com.albertsnow.graphicdemo.widget.AspectFrameLayout>

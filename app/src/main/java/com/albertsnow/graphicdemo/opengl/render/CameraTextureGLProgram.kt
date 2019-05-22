@@ -1,14 +1,17 @@
 package com.albertsnow.graphicdemo.opengl.render
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.opengl.GLES11Ext
 import android.opengl.GLES20
+import android.util.Log
 import com.albertsnow.graphicdemo.R
 import com.albertsnow.graphicdemo.opengl.utils.GlUtil
 import com.albertsnow.graphicdemo.opengl.utils.TextureHelper
 import com.albertsnow.graphicdemo.opengl.utils.flatten
 import com.albertsnow.graphicdemo.opengl.utils.generateOneBuffer
 import java.nio.FloatBuffer
+import java.nio.IntBuffer
 import java.nio.ShortBuffer
 
 class CameraTextureGLProgram : AbsOpenGLProgram() {
@@ -55,7 +58,12 @@ class CameraTextureGLProgram : AbsOpenGLProgram() {
     private var u_overlay_location = -1
 
     private lateinit var mContext: Context
+    public var callback: CameraGlCallBack ?= null
 
+
+    companion object {
+        var saveCamera = false
+    }
 
     override fun getVertexShaderSource(): String {
         return box_vert
@@ -126,6 +134,10 @@ class CameraTextureGLProgram : AbsOpenGLProgram() {
     }
 
 
+    private var screenWidth: Int = 0
+    private var screenHeight: Int = 0
+
+
     override fun draw(projectionMatrix: Matrix44F, cameraview: Matrix44F, size: Vec2F) {
         GLES20.glUseProgram(programPointer)
 
@@ -140,7 +152,7 @@ class CameraTextureGLProgram : AbsOpenGLProgram() {
         GLES20.glUniformMatrix4fv(camera_matrix_location, 1, false, cameraview.data, 0)
         GLES20.glUniformMatrix4fv(project_matrix_location, 1, false, projectionMatrix.data, 0)
 
-//        GlUtil.checkGlError("glUniform2 location: "  + u_overlay_location + " value: " + overlayTextureId)
+        GlUtil.checkGlError("camera_matrix_location project_matrix_location")
 
         GLES20.glUniform1i(u_sampler_2D_location, 0)
         GlUtil.checkGlError("u_sampler_2D_location")
@@ -149,6 +161,28 @@ class CameraTextureGLProgram : AbsOpenGLProgram() {
 
         GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, index_buffer)
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, 6, GLES20.GL_UNSIGNED_SHORT, 0)
+
+
+        screenWidth = size.data[0].toInt()
+        screenHeight = size.data[1].toInt()
+
+        if (CameraTextureGLProgram.saveCamera) {
+            CameraTextureGLProgram.saveCamera = false
+            val pixels = IntBuffer.allocate(screenWidth * screenHeight)
+
+            val startTime = System.currentTimeMillis()
+            GLES20.glReadPixels(0, 0, screenWidth, screenHeight, GLES20.GL_RGBA,  GLES20.GL_UNSIGNED_BYTE,  pixels )
+            Log.i("TimeCast", "cast: " + (System.currentTimeMillis() - startTime))
+
+
+            val castStartTime = System.currentTimeMillis()
+            val stitchBmp = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.ARGB_8888)
+            stitchBmp.copyPixelsFromBuffer(pixels)
+            Log.i("TimeCast", "castStartTime: " + (System.currentTimeMillis() - castStartTime))
+
+            callback?.onCapture(stitchBmp)
+        }
+
     }
 
     fun createExternalTexture(): Int {
@@ -184,5 +218,8 @@ class CameraTextureGLProgram : AbsOpenGLProgram() {
     }
 
 
+    interface CameraGlCallBack {
+        fun onCapture(frame: Bitmap)
+    }
 
 }

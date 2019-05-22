@@ -2,14 +2,13 @@ package com.albertsnow.graphicdemo.camera
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.SurfaceTexture
 import android.hardware.Camera
 import android.os.Bundle
 import android.util.Log
-import android.view.Surface
-import android.view.SurfaceHolder
-import android.view.SurfaceView
-import android.view.WindowManager
+import android.view.*
+import android.widget.ImageView
 import android.widget.Toast
 import com.albertsnow.graphicdemo.R
 import com.albertsnow.graphicdemo.opengl.EglCore
@@ -21,7 +20,9 @@ import com.albertsnow.graphicdemo.opengl.utils.PermissionHelper
 import com.albertsnow.graphicdemo.widget.AspectFrameLayout
 import java.io.IOException
 
-class CameraActivity : Activity(), SurfaceHolder.Callback, SurfaceTexture.OnFrameAvailableListener {
+class CameraActivity : Activity(), SurfaceHolder.Callback, SurfaceTexture.OnFrameAvailableListener,
+        CameraTextureGLProgram.CameraGlCallBack {
+
     private val TAG : String = "CameraActivity"
     private val VIDEO_WIDTH = 1280  // dimensions for 720p video
     private val VIDEO_HEIGHT = 720
@@ -34,12 +35,20 @@ class CameraActivity : Activity(), SurfaceHolder.Callback, SurfaceTexture.OnFram
 
     private lateinit var render: CameraOpenGLRender
 
+    private var frameImageView: ImageView? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.camera_activity)
         render = CameraOpenGLRender(this, CameraTextureGLProgram())
+        render.program.callback = this
         val surfaceView = findViewById<SurfaceView>(R.id.camera_surface_view)
         surfaceView.holder.addCallback(this)
+
+        findViewById<View>(R.id.camera_save_bitmap_view).setOnClickListener {
+            CameraTextureGLProgram.saveCamera = true
+        }
+        frameImageView = findViewById<ImageView>(R.id.camera_frame_image_view)
     }
 
     override fun onResume() {
@@ -210,6 +219,13 @@ class CameraActivity : Activity(), SurfaceHolder.Callback, SurfaceTexture.OnFram
         render.onDrawFrame()
 
         mDisplaySurface.swapBuffers()
+    }
+
+
+    override fun onCapture(frame: Bitmap) {
+        runOnUiThread {
+            frameImageView?.setImageBitmap(frame)
+        }
     }
 
 }
