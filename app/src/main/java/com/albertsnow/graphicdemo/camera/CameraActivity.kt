@@ -11,6 +11,8 @@ import android.view.*
 import android.widget.ImageView
 import android.widget.Toast
 import com.albertsnow.graphicdemo.R
+import com.albertsnow.graphicdemo.Utils.LogUtil
+import com.albertsnow.graphicdemo.Utils.SystemUtils
 import com.albertsnow.graphicdemo.opengl.EglCore
 import com.albertsnow.graphicdemo.opengl.WindowSurface
 import com.albertsnow.graphicdemo.opengl.render.CameraOpenGLRender
@@ -20,12 +22,13 @@ import com.albertsnow.graphicdemo.opengl.utils.PermissionHelper
 import com.albertsnow.graphicdemo.widget.AspectFrameLayout
 import java.io.IOException
 
+
 class CameraActivity : Activity(), SurfaceHolder.Callback, SurfaceTexture.OnFrameAvailableListener,
         CameraTextureGLProgram.CameraGlCallBack {
 
     private val TAG : String = "CameraActivity"
-    private val VIDEO_WIDTH = 1280  // dimensions for 720p video
-    private val VIDEO_HEIGHT = 720
+    private var VIDEO_WIDTH = 1080  // dimensions for 720p video
+    private var VIDEO_HEIGHT = 2160
     private val DESIRED_PREVIEW_FPS = 15
 
     private var mCamera: Camera? = null
@@ -42,6 +45,11 @@ class CameraActivity : Activity(), SurfaceHolder.Callback, SurfaceTexture.OnFram
         setContentView(R.layout.camera_activity)
         render = CameraOpenGLRender(this, CameraTextureGLProgram())
         render.program.callback = this
+
+        val dimension = SystemUtils.getDisplay(this)
+        VIDEO_WIDTH = dimension[0]
+        VIDEO_HEIGHT = dimension[1]
+
         val surfaceView = findViewById<SurfaceView>(R.id.camera_surface_view)
         surfaceView.holder.addCallback(this)
 
@@ -110,6 +118,8 @@ class CameraActivity : Activity(), SurfaceHolder.Callback, SurfaceTexture.OnFram
         val parms = mCamera!!.parameters
 
         CameraUtils.choosePreviewSize(parms, desiredWidth, desiredHeight)
+        LogUtil.i(TAG, "desire size width: $desiredWidth height： $desiredHeight")
+        LogUtil.i(TAG, "preview size width: ${parms.previewSize.width} height： ${parms.previewSize.height}")
 
         // Give the camera a hint that we're recording video.  This can have a big
         // impact on frame rate.
@@ -123,17 +133,51 @@ class CameraActivity : Activity(), SurfaceHolder.Callback, SurfaceTexture.OnFram
 
         val display = (getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
 
+        mCamera!!.setDisplayOrientation(getOrientation(this))
         if (display.rotation == Surface.ROTATION_0) {
-            mCamera!!.setDisplayOrientation(90)
             layout.setAspectRatio(cameraPreviewSize.height.toDouble() / cameraPreviewSize.width)
         } else if (display.rotation == Surface.ROTATION_270) {
             layout.setAspectRatio(cameraPreviewSize.height.toDouble() / cameraPreviewSize.width)
-            mCamera!!.setDisplayOrientation(180)
         } else {
-            // Set the preview aspect ratio.
             layout.setAspectRatio(cameraPreviewSize.width.toDouble() / cameraPreviewSize.height)
         }
     }
+
+
+    fun getOrientation(context: Context): Int {
+        val display = (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
+        val rotation = display.rotation
+        var orientation: Int
+        val expectPortrait: Boolean
+        when (rotation) {
+            Surface.ROTATION_0 -> {
+                orientation = 90
+                expectPortrait = true
+            }
+            Surface.ROTATION_90 -> {
+                orientation = 0
+                expectPortrait = false
+            }
+            Surface.ROTATION_180 -> {
+                orientation = 270
+                expectPortrait = true
+            }
+            Surface.ROTATION_270 -> {
+                orientation = 180
+                expectPortrait = false
+            }
+            else -> {
+                orientation = 90
+                expectPortrait = true
+            }
+        }
+        val isPortrait = display.height > display.width
+        if (isPortrait != expectPortrait) {
+            orientation = (orientation + 270) % 360
+        }
+        return orientation
+    }
+
 
     /**
      * Stops camera preview, and releases the camera to the system.

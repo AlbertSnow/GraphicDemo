@@ -27,7 +27,9 @@
 
         <activity android:name=".SecondActivity"/>
         <activity android:name=".opengl.MultiTextureActivity"/>
-        <activity android:name=".camera.CameraActivity"/>
+        <activity android:name=".camera.CameraActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
 
         <activity
             android:name=".opengl.OpenGLActivity"
