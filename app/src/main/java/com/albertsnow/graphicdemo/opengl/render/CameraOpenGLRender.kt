@@ -20,7 +20,8 @@ class CameraOpenGLRender(var context: Context, val program: CameraTextureGLProgr
 
      fun onSurfaceCreated() {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f)
-        Matrix.setLookAtM(cameraMatrix.data, 0, 0f, 0f, -3f, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+         Matrix.setLookAtM(cameraMatrix.data, 0, 0f, 0f, -3f, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+        GlUtil.checkGlError("setLookAtM")
         program.initProgram(context)
     }
 
@@ -43,10 +44,6 @@ class CameraOpenGLRender(var context: Context, val program: CameraTextureGLProgr
      fun onDrawFrame() {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT)
         GlUtil.checkGlError("glClear")
-
-//        // Set the camera position (View matrix)
-        Matrix.setLookAtM(cameraMatrix.data, 0, 0f, 0f, -3f, 0f, 0f, 0f, 0f, 1.0f, 0.0f)
-        GlUtil.checkGlError("setLookAtM")
 
         program.draw(projectionMatrix = projectionMatrix,
                 cameraview = cameraMatrix,
