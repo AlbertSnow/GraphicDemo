@@ -17,7 +17,7 @@ class TransformOpenGLRender(context: Context, program: AbsOpenGLProgram = Opengl
 
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f)
-        Matrix.setLookAtM(cameraMatrix.data, 0, 0f, 0f, -3f, 0f, 0f, 0f, 0f, 1.0f, 0.0f)
+        Matrix.setLookAtM(viewMatrix.data, 0, 0f, 0f, -3f, 0f, 0f, 0f, 0f, 1.0f, 0.0f)
         program.initProgram(context)
     }
 
@@ -41,10 +41,10 @@ class TransformOpenGLRender(context: Context, program: AbsOpenGLProgram = Opengl
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT)
 
 //        // Set the camera position (View matrix)
-        Matrix.setLookAtM(cameraMatrix.data, 0, 0f, 0f, -3f, 0f, 0f, 0f, 0f, 1.0f, 0.0f)
+        Matrix.setLookAtM(viewMatrix.data, 0, 0f, 0f, -3f, 0f, 0f, 0f, 0f, 1.0f, 0.0f)
 
         program.draw(projectionMatrix = projectionMatrix,
-                cameraview = cameraMatrix,
+                viewMatrix = viewMatrix,
                 size = size)
     }
 

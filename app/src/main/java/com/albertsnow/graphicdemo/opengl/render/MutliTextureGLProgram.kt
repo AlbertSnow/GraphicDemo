@@ -108,7 +108,7 @@ class MutliTextureGLProgram : AbsOpenGLProgram() {
     }
 
 
-    override fun draw(projectionMatrix: Matrix44F, cameraview: Matrix44F, size: Vec2F) {
+    override fun draw(projectionMatrix: Matrix44F, cameraview: Matrix44F, modelMatrix: Matrix44F, size: Vec2F) {
         GLES20.glUseProgram(programPointer)
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vertex_coord_buffer)
