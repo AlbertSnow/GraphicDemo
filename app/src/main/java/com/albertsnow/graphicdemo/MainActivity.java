@@ -21,6 +21,7 @@ import com.albertsnow.graphicdemo.camera.CameraActivity;
 import com.albertsnow.graphicdemo.jni.TestReference;
 import com.albertsnow.graphicdemo.opengl.MultiTextureActivity;
 import com.albertsnow.graphicdemo.opengl.OpenGLActivity;
+import com.albertsnow.graphicdemo.opengl.transform.TransformActivity;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -73,6 +74,9 @@ public class MainActivity extends AppCompatActivity
                         break;
                     case 2:
                         intent.setClass(MainActivity.this, CameraActivity.class);
+                        break;
+                    case 3:
+                        intent.setClass(MainActivity.this, TransformActivity.class);
                         break;
                 }
                 startActivity(intent);

@@ -12,5 +12,6 @@
         <item>OpenGL Load Texture</item>
         <item>OpenGL Load Two Texture</item>
         <item>Camera Merge Preview With Overlay Texture</item>
+        <item>OpenGL Transform Texture</item>
     </string-array>
 </resources>

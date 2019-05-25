@@ -10,7 +10,7 @@ import java.nio.FloatBuffer
 import java.nio.ShortBuffer
 
 
-class OpenglProgram : AbsOpenGLProgram() {
+class OpenglProgram (val textureResourceID: Int = R.drawable.flower) : AbsOpenGLProgram() {
 
     private var vertex_coord_location: Int = 0
     private var camera_matrix_location: Int = 0
@@ -102,7 +102,7 @@ class OpenglProgram : AbsOpenGLProgram() {
         val cube_faces_buffer = ShortBuffer.wrap(flatten(cube_faces))
         GLES20.glBufferData(GLES20.GL_ELEMENT_ARRAY_BUFFER, cube_faces_buffer.limit() * 2, cube_faces_buffer, GLES20.GL_STATIC_DRAW)
 
-        textureId = TextureHelper.loadTexture(context, R.drawable.flower)
+        textureId = TextureHelper.loadTexture(context, textureResourceID)
     }
 
 

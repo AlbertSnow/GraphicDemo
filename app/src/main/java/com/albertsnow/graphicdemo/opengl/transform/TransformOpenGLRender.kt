@@ -1,27 +1,23 @@
-package com.albertsnow.graphicdemo.opengl.render
+package com.albertsnow.graphicdemo.opengl.transform
 
 import android.content.Context
 import android.opengl.GLES20
-import android.opengl.GLSurfaceView
 import android.opengl.Matrix
+import com.albertsnow.graphicdemo.R
+import com.albertsnow.graphicdemo.opengl.render.AbsOpenGLProgram
+import com.albertsnow.graphicdemo.opengl.render.OpenGLRender
+import com.albertsnow.graphicdemo.opengl.render.OpenglProgram
+import com.albertsnow.graphicdemo.opengl.render.Vec2F
 import com.albertsnow.graphicdemo.opengl.shape.Triangle
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-open class OpenGLRender(var context: Context, val program: AbsOpenGLProgram = OpenglProgram()) : GLSurfaceView.Renderer {
-
-    lateinit var size : Vec2F
-
-    var mWidth: Int = 0
-    var mHeight: Int = 0
-
-    val projectionMatrix = Matrix44F()
-    val cameraMatrix = Matrix44F()
-
+class TransformOpenGLRender(context: Context, program: AbsOpenGLProgram = OpenglProgram(textureResourceID = R.drawable.fix_motor))
+    : OpenGLRender(context, program){
 
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f)
-        Matrix.setLookAtM(cameraMatrix.data, 0, 0f, 0f, -3f, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+        Matrix.setLookAtM(cameraMatrix.data, 0, 0f, 0f, -3f, 0f, 0f, 0f, 0f, 1.0f, 0.0f)
         program.initProgram(context)
     }
 
