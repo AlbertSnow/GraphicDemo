@@ -15,6 +15,7 @@ class OpenglProgram (val textureResourceID: Int = R.drawable.flower) : AbsOpenGL
     private var vertex_coord_location: Int = 0
     private var camera_matrix_location: Int = 0
     private var project_matrix_location: Int = 0
+    private var model_matrix_location: Int = 0
     private var vertex_coord_buffer: Int = 0
 
     private var texture_coord_buffer: Int = 0
@@ -24,6 +25,7 @@ class OpenglProgram (val textureResourceID: Int = R.drawable.flower) : AbsOpenGL
 
     private val box_vert = ("uniform mat4 trans;\n"
             + "uniform mat4 proj;\n"
+            + "uniform mat4 model;\n"
             + "attribute vec4 coord;\n"
             + "attribute vec2 aTexture;\n"
             + "varying vec2 vtexture;\n"
@@ -31,7 +33,7 @@ class OpenglProgram (val textureResourceID: Int = R.drawable.flower) : AbsOpenGL
             + "void main()\n"
             + "{\n"
             + "     vtexture = aTexture;\n"
-            + "    gl_Position = proj*trans*coord;\n"
+            + "    gl_Position = proj*trans*model*coord;\n"
             + "}\n"
             + "\n")
 
@@ -67,6 +69,7 @@ class OpenglProgram (val textureResourceID: Int = R.drawable.flower) : AbsOpenGL
         texture_coord_location = GLES20.glGetAttribLocation(programPointer, "aTexture")
         camera_matrix_location = GLES20.glGetUniformLocation(programPointer, "trans")
         project_matrix_location = GLES20.glGetUniformLocation(programPointer, "proj")
+        model_matrix_location = GLES20.glGetUniformLocation(programPointer, "model")
         u_sampler_2D_location = GLES20.glGetUniformLocation(programPointer, "u_TextureUnit")
 
         vertex_coord_buffer = generateOneBuffer()
@@ -119,6 +122,7 @@ class OpenglProgram (val textureResourceID: Int = R.drawable.flower) : AbsOpenGL
 
         GLES20.glUniformMatrix4fv(camera_matrix_location, 1, false, cameraview.data, 0)
         GLES20.glUniformMatrix4fv(project_matrix_location, 1, false, projectionMatrix.data, 0)
+        GLES20.glUniformMatrix4fv(model_matrix_location, 1, false, modelMatrix.data, 0)
 
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId)
