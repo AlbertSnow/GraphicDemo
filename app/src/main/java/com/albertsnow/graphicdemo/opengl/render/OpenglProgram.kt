@@ -75,10 +75,10 @@ class OpenglProgram (val textureResourceID: Int = R.drawable.flower) : AbsOpenGL
         vertex_coord_buffer = generateOneBuffer()
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vertex_coord_buffer)
         val cube_vertices = arrayOf(
-                        floatArrayOf(1.0f / 2, 1.0f / 2, 0.01f / 2),
-                        floatArrayOf(1.0f / 2, -1.0f / 2, 0.01f / 2),
-                        floatArrayOf(-1.0f / 2, -1.0f / 2, 0.01f / 2),
-                        floatArrayOf(-1.0f / 2, 1.0f / 2, 0.01f / 2)
+                        floatArrayOf(1.0f / 2, 1.0f / 2, 0f),
+                        floatArrayOf(1.0f / 2, -1.0f / 2, 0f),
+                        floatArrayOf(-1.0f / 2, -1.0f / 2, 0f),
+                        floatArrayOf(-1.0f / 2, 1.0f / 2, 0f)
         )
         val cube_vertices_buffer = FloatBuffer.wrap(flatten(cube_vertices))
         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, cube_vertices_buffer.limit() * 4, cube_vertices_buffer, GLES20.GL_DYNAMIC_DRAW)

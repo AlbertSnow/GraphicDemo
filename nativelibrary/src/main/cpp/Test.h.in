@@ -1,0 +1,2 @@
+#define TestNative_VERSION_MAJOR @TestNative_VERSION_MAJOR@
+#define TestNative_VERSION_MINOR @TestNative_VERSION_MINOR@

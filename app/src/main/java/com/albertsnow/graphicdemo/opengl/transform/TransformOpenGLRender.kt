@@ -42,6 +42,8 @@ class TransformOpenGLRender(context: Context, program: AbsOpenGLProgram = Opengl
 
 //        // Set the camera position (View matrix)
         Matrix.setLookAtM(viewMatrix.data, 0, 0f, 0f, -3f, 0f, 0f, 0f, 0f, 1.0f, 0.0f)
+//        Matrix.setIdentityM(viewMatrix.data, 0)
+//        Matrix.translateM(viewMatrix.data, 0, 0f, 0f, -3f)
 
         Matrix.setIdentityM(modelMatrix.data, 0)
         Matrix.rotateM(modelMatrix.data, 0, 55f, 1f, 0f, 0f)
