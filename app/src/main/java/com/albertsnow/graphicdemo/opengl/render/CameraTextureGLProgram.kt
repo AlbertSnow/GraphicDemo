@@ -14,6 +14,9 @@ import java.nio.FloatBuffer
 import java.nio.IntBuffer
 import java.nio.ShortBuffer
 
+var saveCameraFrame = false
+var cameraRotation = 0
+
 class CameraTextureGLProgram : AbsOpenGLProgram() {
     private var vertex_coord_location: Int = 0
     private var camera_matrix_location: Int = 0
@@ -60,10 +63,6 @@ class CameraTextureGLProgram : AbsOpenGLProgram() {
     private lateinit var mContext: Context
     public var callback: CameraGlCallBack ?= null
 
-
-    companion object {
-        var saveCamera = false
-    }
 
     override fun getVertexShaderSource(): String {
         return box_vert
@@ -166,8 +165,8 @@ class CameraTextureGLProgram : AbsOpenGLProgram() {
         screenWidth = size.data[0].toInt()
         screenHeight = size.data[1].toInt()
 
-        if (CameraTextureGLProgram.saveCamera) {
-            CameraTextureGLProgram.saveCamera = false
+        if (saveCameraFrame) {
+            saveCameraFrame = false
             val pixels = IntBuffer.allocate(screenWidth * screenHeight)
 
             val startTime = System.currentTimeMillis()

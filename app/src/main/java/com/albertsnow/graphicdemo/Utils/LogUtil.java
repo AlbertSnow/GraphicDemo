@@ -3,6 +3,7 @@ package com.albertsnow.graphicdemo.Utils;
 import android.util.Log;
 
 public class LogUtil {
+    private static String DEBUG_TAG = "DebugTag";
 
     private static final String TAG = "NativeTest";
 
@@ -19,6 +20,12 @@ public class LogUtil {
     public static void d(String tag, String msg) {
         if (allowLog(tag, msg)) {
             Log.d(tag, msg);
+        }
+    }
+
+    public static void debug(String msg) {
+        if (allowLog(DEBUG_TAG, msg)) {
+            Log.d(DEBUG_TAG, msg);
         }
     }
 

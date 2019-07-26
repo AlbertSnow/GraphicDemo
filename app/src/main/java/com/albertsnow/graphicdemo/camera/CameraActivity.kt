@@ -1,7 +1,6 @@
 package com.albertsnow.graphicdemo.camera
 
 import android.app.Activity
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.SurfaceTexture
 import android.hardware.Camera
@@ -17,9 +16,10 @@ import com.albertsnow.graphicdemo.opengl.EglCore
 import com.albertsnow.graphicdemo.opengl.WindowSurface
 import com.albertsnow.graphicdemo.opengl.render.CameraOpenGLRender
 import com.albertsnow.graphicdemo.opengl.render.CameraTextureGLProgram
+import com.albertsnow.graphicdemo.opengl.render.cameraRotation
+import com.albertsnow.graphicdemo.opengl.render.saveCameraFrame
 import com.albertsnow.graphicdemo.opengl.utils.CameraUtils
 import com.albertsnow.graphicdemo.opengl.utils.PermissionHelper
-import com.albertsnow.graphicdemo.widget.AspectFrameLayout
 import java.io.IOException
 
 
@@ -27,8 +27,8 @@ class CameraActivity : Activity(), SurfaceHolder.Callback, SurfaceTexture.OnFram
         CameraTextureGLProgram.CameraGlCallBack {
 
     private val TAG : String = "CameraActivity"
-    private var VIDEO_WIDTH = 1080  // dimensions for 720p video
-    private var VIDEO_HEIGHT = 2160
+    private var VIDEO_WIDTH = 0  // dimensions for 720p video
+    private var VIDEO_HEIGHT = 0
     private val DESIRED_PREVIEW_FPS = 15
 
     private var mCamera: Camera? = null
@@ -54,7 +54,7 @@ class CameraActivity : Activity(), SurfaceHolder.Callback, SurfaceTexture.OnFram
         surfaceView.holder.addCallback(this)
 
         findViewById<View>(R.id.camera_save_bitmap_view).setOnClickListener {
-            CameraTextureGLProgram.saveCamera = true
+            saveCameraFrame = true
         }
         frameImageView = findViewById<ImageView>(R.id.camera_frame_image_view)
     }
@@ -99,11 +99,10 @@ class CameraActivity : Activity(), SurfaceHolder.Callback, SurfaceTexture.OnFram
 
         val info = Camera.CameraInfo()
 
-        // Try to find a front-facing camera (e.g. for videoconferencing).
         val numCameras = Camera.getNumberOfCameras()
         for (i in 0 until numCameras) {
             Camera.getCameraInfo(i, info)
-            if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+            if (info.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
                 mCamera = Camera.open(i)
                 break
             }
@@ -127,56 +126,26 @@ class CameraActivity : Activity(), SurfaceHolder.Callback, SurfaceTexture.OnFram
 
         mCamera!!.setParameters(parms)
 
-        val cameraPreviewSize = parms.getPreviewSize()
+//        val cameraPreviewSize = parms.getPreviewSize()
 
-        val layout = findViewById(R.id.continuousCapture_afl) as AspectFrameLayout
+//        val layout = findViewById(R.id.continuousCapture_afl) as AspectFrameLayout
 
-        val display = (getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
+//        val display = (getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
 
-        mCamera!!.setDisplayOrientation(getOrientation(this))
-        if (display.rotation == Surface.ROTATION_0) {
-            layout.setAspectRatio(cameraPreviewSize.height.toDouble() / cameraPreviewSize.width)
-        } else if (display.rotation == Surface.ROTATION_270) {
-            layout.setAspectRatio(cameraPreviewSize.height.toDouble() / cameraPreviewSize.width)
-        } else {
-            layout.setAspectRatio(cameraPreviewSize.width.toDouble() / cameraPreviewSize.height)
-        }
+        cameraRotation = getCameraOrientation(this)
+//        mCamera!!.setDisplayOrientation(getCameraOrientation(this))
+//        mCamera!!.setDisplayOrientation(180)  //not work at all on OpenGL case
+//        mCamera!!.setDisplayOrientation()
+//        if (display.rotation == Surface.ROTATION_0) {
+//            layout.setAspectRatio(cameraPreviewSize.height.toDouble() / cameraPreviewSize.width)
+//        } else if (display.rotation == Surface.ROTATION_270) {
+//            layout.setAspectRatio(cameraPreviewSize.height.toDouble() / cameraPreviewSize.width)
+//        } else {
+//            layout.setAspectRatio(cameraPreviewSize.width.toDouble() / cameraPreviewSize.height)
+//        }
     }
 
 
-    fun getOrientation(context: Context): Int {
-        val display = (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
-        val rotation = display.rotation
-        var orientation: Int
-        val expectPortrait: Boolean
-        when (rotation) {
-            Surface.ROTATION_0 -> {
-                orientation = 90
-                expectPortrait = true
-            }
-            Surface.ROTATION_90 -> {
-                orientation = 0
-                expectPortrait = false
-            }
-            Surface.ROTATION_180 -> {
-                orientation = 270
-                expectPortrait = true
-            }
-            Surface.ROTATION_270 -> {
-                orientation = 180
-                expectPortrait = false
-            }
-            else -> {
-                orientation = 90
-                expectPortrait = true
-            }
-        }
-        val isPortrait = display.height > display.width
-        if (isPortrait != expectPortrait) {
-            orientation = (orientation + 270) % 360
-        }
-        return orientation
-    }
 
 
     /**
@@ -216,6 +185,8 @@ class CameraActivity : Activity(), SurfaceHolder.Callback, SurfaceTexture.OnFram
         mCameraTexture = SurfaceTexture(render.program.externalTextureId)
         mCameraTexture.setOnFrameAvailableListener(this)
         startPreview()
+
+        LogUtil.debug("Thread surfaceCreated: ${Thread.currentThread().name}")
     }
 
     override fun onFrameAvailable(surfaceTexture: SurfaceTexture?) {
@@ -263,6 +234,8 @@ class CameraActivity : Activity(), SurfaceHolder.Callback, SurfaceTexture.OnFram
         render.onDrawFrame()
 
         mDisplaySurface.swapBuffers()
+
+        LogUtil.debug("Thread drawFrame: ${Thread.currentThread().name}")
     }
 
 
