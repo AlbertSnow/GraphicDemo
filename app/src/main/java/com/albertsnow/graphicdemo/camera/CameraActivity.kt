@@ -126,23 +126,7 @@ class CameraActivity : Activity(), SurfaceHolder.Callback, SurfaceTexture.OnFram
 
         mCamera!!.setParameters(parms)
 
-//        val cameraPreviewSize = parms.getPreviewSize()
-
-//        val layout = findViewById(R.id.continuousCapture_afl) as AspectFrameLayout
-
-//        val display = (getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
-
-        cameraRotation = getCameraOrientation(this)
-//        mCamera!!.setDisplayOrientation(getCameraOrientation(this))
-//        mCamera!!.setDisplayOrientation(180)  //not work at all on OpenGL case
-//        mCamera!!.setDisplayOrientation()
-//        if (display.rotation == Surface.ROTATION_0) {
-//            layout.setAspectRatio(cameraPreviewSize.height.toDouble() / cameraPreviewSize.width)
-//        } else if (display.rotation == Surface.ROTATION_270) {
-//            layout.setAspectRatio(cameraPreviewSize.height.toDouble() / cameraPreviewSize.width)
-//        } else {
-//            layout.setAspectRatio(cameraPreviewSize.width.toDouble() / cameraPreviewSize.height)
-//        }
+        cameraRotation = getCameraOrientation(this).toFloat()
     }
 
 

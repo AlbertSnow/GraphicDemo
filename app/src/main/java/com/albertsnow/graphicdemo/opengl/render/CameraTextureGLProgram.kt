@@ -15,7 +15,7 @@ import java.nio.IntBuffer
 import java.nio.ShortBuffer
 
 var saveCameraFrame = false
-var cameraRotation = 0
+var cameraRotation: Float = 0f
 
 class CameraTextureGLProgram : AbsOpenGLProgram() {
     private var vertex_coord_location: Int = 0

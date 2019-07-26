@@ -37,6 +37,8 @@ class CameraOpenGLRender(var context: Context, val program: CameraTextureGLProgr
         val ratio: Float = mWidth.toFloat() / mHeight.toFloat()
         Matrix.frustumM(projectionMatrix.data, 0, -ratio, ratio, -1f, 1f, 3f, 7f)
 
+        val magicCode = 180
+        Matrix.rotateM(projectionMatrix.data, 0, cameraRotation + magicCode, 0f, 0f, 1f)
 
         mTriangle = Triangle()
     }
