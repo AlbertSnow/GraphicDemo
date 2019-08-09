@@ -10,10 +10,8 @@
 #endif //GRAPHICDEMO_DEBUGUTILS_H
 
 
-void logStr(const char *str) {
-    __android_log_print(ANDROID_LOG_DEBUG, "NativeTest", "logStr: %s\n", str);
-}
+void logStr(const char *str);
 
-void logInt(int intData) {
-    __android_log_print(ANDROID_LOG_DEBUG, "NativeTest", "logInt: %d\n", intData);
-}
+void logInt(int intData);
+
+void setDebug(bool isDebug);
