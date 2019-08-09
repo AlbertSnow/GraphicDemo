@@ -10,6 +10,33 @@ cmake_minimum_required(VERSION 3.4.1)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -static-libstdc++")
 
+set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
+
+#############
+
+# Attetion please
+# My custom variable, you should change to youself path
+
+#############
+#set(OpenCV_DIR "/Users/apple/CWorkSpace/OpenCV/opencv")
+#
+#INCLUDE_DIRECTORIES(${OpenCV_DIR}/include)
+#INCLUDE_DIRECTORIES(${OpenCV_DIR}/android_dir)
+#INCLUDE_DIRECTORIES(${OpenCV_DIR}/modules)
+#INCLUDE_DIRECTORIES(${OpenCV_DIR}/modules/include)
+#INCLUDE_DIRECTORIES(${OpenCV_DIR}/build)
+#
+#LINK_LIBRARIES("/Users/apple/WorkSpace/GraphicDemo/opencvlibrary/libs/arm64-v8a")
+
+
+#set(OpenCV_DIR "/Users/apple/CWorkSpace/OpenCV/opencv")
+#INCLUDE_DIRECTORIES(${OpenCV_DIR}/include)
+
+set(OPENCV_HOME "../opencv4-ndk19/sdk")
+
+LINK_DIRECTORIES(${OPENCV_HOME}/native/libs/arm64-v8a)
+INCLUDE_DIRECTORIES(${OPENCV_HOME}/native/jni/include)
+
 add_definitions(-D__ANDROID_API__=21)
 
 # Creates and names a library, sets it as either STATIC
@@ -18,7 +45,7 @@ add_definitions(-D__ANDROID_API__=21)
 # Gradle automatically packages shared libraries with your APK.
 
 add_library( # Sets the name of the library.
-             graphci-lib
+             graphic
 
              # Sets the library as a shared library.
              SHARED
@@ -47,7 +74,8 @@ find_library( # Sets the name of the path variable.
 # build script, prebuilt third-party libraries, or system libraries.
 
 target_link_libraries( # Specifies the target library.
-                        graphci-lib
+                        graphic
+                        opencv_java4
 
                        # Links the target library to the log library
                        # included in the NDK.
