@@ -21,6 +21,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
+import com.albert.opencvlibrary.CVPictureUtils
 
 import com.albertsnow.graphicdemo.camera.CameraActivity
 import com.albertsnow.graphicdemo.jni.TestReference
@@ -59,6 +60,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onResume() {
         super.onResume()
         requestPermission()
+        CVPictureUtils.testMainMethod();
     }
 
     private fun initView() {
