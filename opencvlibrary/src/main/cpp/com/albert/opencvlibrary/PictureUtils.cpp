@@ -2,7 +2,7 @@
 // Created by Apple on 2019-08-02.
 //
 
-#include "stdio.h"
+                                                                                                             #include <cstdio>
 #include <opencv2/opencv.hpp>
 #include <jni.h>
 #include <fcntl.h>
