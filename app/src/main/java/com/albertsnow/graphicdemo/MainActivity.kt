@@ -27,6 +27,7 @@ import com.albertsnow.graphicdemo.camera.CameraActivity
 import com.albertsnow.graphicdemo.jni.TestReference
 import com.albertsnow.graphicdemo.opengl.MultiTextureActivity
 import com.albertsnow.graphicdemo.opengl.OpenGLActivity
+import com.albertsnow.graphicdemo.opengl.QuickSurfaceActivity
 import com.albertsnow.graphicdemo.opengl.transform.TransformActivity
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -76,6 +77,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 1 -> intent.setClass(this@MainActivity, MultiTextureActivity::class.java)
                 2 -> intent.setClass(this@MainActivity, CameraActivity::class.java)
                 3 -> intent.setClass(this@MainActivity, TransformActivity::class.java)
+                4 -> intent.setClass(this@MainActivity, QuickSurfaceActivity::class.java)
             }
             startActivity(intent)
         }

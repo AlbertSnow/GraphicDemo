@@ -37,6 +37,8 @@
             android:name=".opengl.OpenGLActivity"
             android:theme="@style/AppTheme.NoActionBar"
             />
+        <activity android:name=".opengl.QuickSurfaceActivity"
+            />
     </application>
 
 </manifest>

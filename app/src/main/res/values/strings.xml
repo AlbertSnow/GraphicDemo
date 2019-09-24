@@ -13,5 +13,6 @@
         <item>OpenGL Load Two Texture</item>
         <item>Camera Merge Preview With Overlay Texture</item>
         <item>OpenGL Transform Texture</item>
+        <item>Quick SurfaceView create</item>
     </string-array>
 </resources>
