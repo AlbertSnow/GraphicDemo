@@ -1,2 +1,4 @@
-include ':app', ':opencvlibrary'
+include ':app', ':detect_lib', ':surfaceapplication', ':recog_lib'
+//        ':opencvlibrary',
+//        ':detect_lib'
 //, ':nativelibrary'
