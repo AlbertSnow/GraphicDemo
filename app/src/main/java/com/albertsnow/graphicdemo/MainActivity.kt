@@ -24,7 +24,6 @@ import android.widget.Toast
 import com.albert.opencvlibrary.CVPictureUtils
 
 import com.albertsnow.graphicdemo.camera.CameraActivity
-import com.albertsnow.graphicdemo.jni.TestReference
 import com.albertsnow.graphicdemo.opengl.MultiTextureActivity
 import com.albertsnow.graphicdemo.opengl.OpenGLActivity
 import com.albertsnow.graphicdemo.opengl.QuickSurfaceActivity
