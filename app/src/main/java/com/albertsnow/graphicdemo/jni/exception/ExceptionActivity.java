@@ -17,12 +17,14 @@ public class ExceptionActivity extends Activity {
 
         initView();
     }
+    TestException exception = new TestException();
+
 
     private void initView() {
         findViewById(R.id.make_exception).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new TestException().testException("Just Test Exception");
+                exception.testException("Just Test Exception");
 
                 Log.i("ExceptionActivity", "receive some inoiooooooooo");
             }

@@ -12,12 +12,12 @@
 
 extern "C" JNIEXPORT void JNICALL Java_com_albertsnow_graphicdemo_jni_exception_TestException_testException (
         JNIEnv *env, jobject thisObj, jstring msg) {
-    jclass cls = env->FindClass("com/albertsnow/graphicdemo/jni/exception/TestException");
-    jmethodID  jmethodId = env->GetMethodID(cls, "makeException", "()V");
+    jclass cls = env->GetObjectClass(thisObj);
 
-    LOGE("start method call");
-    
-    env->CallVoidMethod(cls, jmethodId);
+    jmethodID  jmethodId = env->GetMethodID(cls, "say", "()V");
 
+    LOGE("start method call 1");
+    env->CallVoidMethod(thisObj, jmethodId);
     LOGE("end method call");
+
 }
