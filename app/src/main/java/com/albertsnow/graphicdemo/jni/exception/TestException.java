@@ -13,10 +13,10 @@ public class TestException {
         Log.i("TestJNI", reference.testException("Origin: Hello Word"));
     }
 
-    private native String testException(String msg);
+    public native String testException(String msg);
 
     public void makeException() {
-        int i = 1 / 0;
+        testException("hello");
     }
 
 

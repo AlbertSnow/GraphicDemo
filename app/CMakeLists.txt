@@ -10,7 +10,7 @@ LINK_DIRECTORIES(${SOURCE_DIR})
 
 add_library( NativeException
         SHARED
-        ${SOURCE_DIR}/com_albertsnow_graphicdemo_jni_TestException.cpp
+        ${SOURCE_DIR}/com_albertsnow_graphicdemo_jni_exception_TestException.cpp
         )
 
 TARGET_LINK_LIBRARIES( NativeException
