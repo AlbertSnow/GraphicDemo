@@ -1,4 +1,4 @@
-package com.albertsnow.graphicdemo.jni;
+package com.albertsnow.graphicdemo.jni.exception;
 
 import android.app.Activity;
 import android.os.Bundle;

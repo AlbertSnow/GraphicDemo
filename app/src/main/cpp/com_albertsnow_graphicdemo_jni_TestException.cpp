@@ -8,5 +8,7 @@
 
 extern "C" JNIEXPORT void JNICALL Java_com_albertsnow_graphicdemo_jni_TestException_testException (
         JNIEnv *env, jobject thisObj, jstring msg) {
+    jclass cls = env->FindClass("com/albertsnow/graphicdemo/jni/TestException");
+    env->GetMethodID(cls, "makeException", "()");
 
 }

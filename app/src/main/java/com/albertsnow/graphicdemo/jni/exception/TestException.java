@@ -1,4 +1,4 @@
-package com.albertsnow.graphicdemo.jni;
+package com.albertsnow.graphicdemo.jni.exception;
 
 import android.util.Log;
 
@@ -14,6 +14,10 @@ public class TestException {
     }
 
     private native String testException(String msg);
+
+    public void makeException() {
+        int i = 1 / 0;
+    }
 
 
 }

@@ -16,8 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
-            android:label="@string/title_activity_main"
+            android:name=".home.HomeActivity"
+            android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,7 +26,9 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".MainActivity"/>
         <activity android:name=".SecondActivity"/>
+        <activity android:name=".jni.exception.ExceptionActivity"/>
         <activity android:name=".opengl.MultiTextureActivity"/>
         <activity android:name=".opengl.transform.TransformActivity"/>
         <activity android:name=".camera.CameraActivity"

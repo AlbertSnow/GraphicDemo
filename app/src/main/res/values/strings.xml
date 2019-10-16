@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">GraphicDemo</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_home">HomeActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -15,4 +16,11 @@
         <item>OpenGL Transform Texture</item>
         <item>Quick SurfaceView create</item>
     </string-array>
+
+    <string-array name="module_list">
+        <item>OpenGL</item>
+        <item>Native</item>
+    </string-array>
+
+
 </resources>
