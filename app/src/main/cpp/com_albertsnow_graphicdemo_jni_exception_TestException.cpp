@@ -14,10 +14,15 @@ extern "C" JNIEXPORT void JNICALL Java_com_albertsnow_graphicdemo_jni_exception_
         JNIEnv *env, jobject thisObj, jstring msg) {
     jclass cls = env->GetObjectClass(thisObj);
 
-    jmethodID  jmethodId = env->GetMethodID(cls, "say", "()V");
+    jmethodID  jmethodId = env->GetMethodID(cls, "makeException", "()V");
 
     LOGE("start method call 1");
     env->CallVoidMethod(thisObj, jmethodId);
     LOGE("end method call");
+
+    if (env->ExceptionCheck()) {
+        LOGE("Exception occur.");
+        env->ExceptionDescribe();
+    }
 
 }
