@@ -23,6 +23,15 @@ extern "C" JNIEXPORT void JNICALL Java_com_albertsnow_graphicdemo_jni_exception_
     if (env->ExceptionCheck()) {
         LOGE("Exception occur.");
         env->ExceptionDescribe();
+        env->ExceptionClear();
+
+        // 抛出我们自己的异常处理
+        jclass newExcCls;
+        newExcCls = env->FindClass("java/lang/Exception");
+        if (newExcCls == NULL) {
+            return;
+        }
+        env->ThrowNew(newExcCls, "throw from C Code.");
     }
 
 }
