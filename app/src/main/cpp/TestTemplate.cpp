@@ -15,6 +15,12 @@ T sum (T a, T b)
     return result;
 }
 
+//No-type template
+template<class T, int n>
+T testNoTypeTemplate(T val) {
+    return val * n;
+}
+
 
 int main() {
     int i = 5, j = 6, k;
@@ -25,6 +31,8 @@ int main() {
 
     cout << "result int: " << k << '\n';
     cout << "result double: " << h << '\n';
+
+    cout << "no template result: " << (testNoTypeTemplate<float, 2>(3.0f));
 
     return 0;
 }
