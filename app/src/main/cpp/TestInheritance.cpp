@@ -30,11 +30,18 @@ public:
 };
 
 
+class Child : Human {
+public:
+    Child() {
+        cout << "Im human construct, age: " << age;
+    }
+};
+
 int main() {
     Human human;
 
     cout << "create human over \n";
-
+    Child child;
     //protected修饰Animal，导致所有继承自Animal的member，最多是protected属性
 //    cout << "public age: " << human.publicAge << "\n";
 
