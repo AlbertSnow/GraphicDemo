@@ -6,6 +6,8 @@
 
 using namespace std;
 
+
+// Function template
 template <class T>
 T sum (T a, T b)
 {
@@ -21,6 +23,34 @@ T testNoTypeTemplate(T val) {
     return val * n;
 }
 
+// ---- Function template ----
+
+template<class E>
+class MyPair {
+    E value[2];
+
+public:
+
+    MyPair(E first, E second) {
+        value[0] =  first;
+        value[1] = second;
+    }
+
+    E getMax();
+//    E getMax(){
+//        E retvl;
+//        retvl = value[0] > value[1] ? value[0] : value[1];
+//        return retvl;
+//    }
+};
+
+template <class E>
+E MyPair<E>::getMax() {
+    E retvl;
+    retvl = value[0] > value[1] ? value[0] : value[1];
+    return retvl;
+}
+
 
 int main() {
     int i = 5, j = 6, k;
@@ -34,5 +64,40 @@ int main() {
 
     cout << "no template result: " << (testNoTypeTemplate<float, 2>(3.0f));
 
+    // template decide at compile time, so no type must be constant expr
+    cout << "no template result: " << (testNoTypeTemplate<float, 3>(3.0f));
+
+
+    MyPair<int>* instance = new MyPair<int>(2, 10);
+    cout << "max value: " << instance->getMax() << "\n";
+
+    MyPair<int> instance1 (3, 11);
+    cout << "max value1: " << instance1.getMax() << "\n";
+
+
+    MyPair<int> instance2 (4, 12);
+    cout << "max value2: " << instance2.getMax() << "\n";
+
+
+
     return 0;
 }
+
+//
+//template <class T>
+//class Person {
+//
+//    public:
+//        T name;
+//};
+//
+//int main() {
+//    Person<int> *p1 = new Person<int>();
+//    p1->name = 1;
+//
+//    cout << "Name: " << p1->name << "\n";
+//
+//    return 0;
+//}
+//
+
