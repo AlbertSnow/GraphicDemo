@@ -11,6 +11,9 @@ LINK_DIRECTORIES(${SOURCE_DIR})
 add_library( NativeException
         SHARED
         ${SOURCE_DIR}/com_albertsnow_graphicdemo_jni_exception_TestException.cpp
+        ${SOURCE_DIR}/TestTemplate.cpp
+        ${SOURCE_DIR}/*.cpp
+        ${SOURCE_DIR}/TestInheritance.cpp
         )
 
 TARGET_LINK_LIBRARIES( NativeException
