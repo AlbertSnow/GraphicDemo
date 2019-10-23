@@ -25,6 +25,25 @@ T testNoTypeTemplate(T val) {
 
 // ---- Function template ----
 
+//template<class E>
+//class MyPair {
+//    E value[2];
+//
+//public:
+//
+//    MyPair(E first, E second) {
+//        value[0] =  first;
+//        value[1] = second;
+//    }
+//
+//    E getMax();
+////    E getMax(){
+////        E retvl;
+////        retvl = value[0] > value[1] ? value[0] : value[1];
+////        return retvl;
+////    }
+//};
+
 template<class E>
 class MyPair {
     E value[2];
@@ -37,12 +56,13 @@ public:
     }
 
     E getMax();
-//    E getMax(){
-//        E retvl;
-//        retvl = value[0] > value[1] ? value[0] : value[1];
-//        return retvl;
-//    }
+
+    ~MyPair(){
+        cout << "I'm destructor \n";
+    }
 };
+
+
 
 template <class E>
 E MyPair<E>::getMax() {
@@ -50,7 +70,6 @@ E MyPair<E>::getMax() {
     retvl = value[0] > value[1] ? value[0] : value[1];
     return retvl;
 }
-
 
 int main() {
     int i = 5, j = 6, k;
@@ -62,10 +81,10 @@ int main() {
     cout << "result int: " << k << '\n';
     cout << "result double: " << h << '\n';
 
-    cout << "no template result: " << (testNoTypeTemplate<float, 2>(3.0f));
+    cout << "no template result: " << (testNoTypeTemplate<float, 2>(3.0f)) << '\n';
 
     // template decide at compile time, so no type must be constant expr
-    cout << "no template result: " << (testNoTypeTemplate<float, 3>(3.0f));
+    cout << "no template result: " << (testNoTypeTemplate<float, 3>(3.0f)) << '\n';
 
 
     MyPair<int>* instance = new MyPair<int>(2, 10);
@@ -78,7 +97,7 @@ int main() {
     MyPair<int> instance2 (4, 12);
     cout << "max value2: " << instance2.getMax() << "\n";
 
-
+    delete instance; // dynamic memory need call delete key word
 
     return 0;
 }
