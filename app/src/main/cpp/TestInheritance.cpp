@@ -17,14 +17,23 @@ public:
     Animal(){
         cout  << "animal construct \n";
     }
+
+    void speak() {
+        cout << "animal speak";
+    }
 };
 
 // protected将成为pubicAge的access level
-class Human : protected Animal {
+class Human : public Animal {
 
 public:
     Human() {
         cout << "Im human construct, age: " << age;
+    }
+
+
+    void speak() {
+        cout << "human speak";
     }
 
 };
@@ -44,6 +53,12 @@ int main() {
     Child child;
     //protected修饰Animal，导致所有继承自Animal的member，最多是protected属性
 //    cout << "public age: " << human.publicAge << "\n";
+
+    cout << "\n \n";
+
+    Animal * animal = new Human();
+
+    animal->speak();
 
     return 0;
 }
