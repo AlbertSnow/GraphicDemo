@@ -14,6 +14,7 @@ add_library( NativeException
         ${SOURCE_DIR}/TestTemplate.cpp
         ${SOURCE_DIR}/*.cpp
         ${SOURCE_DIR}/TestInheritance.cpp
+        ${SOURCE_DIR}/TestException.cpp
         )
 
 TARGET_LINK_LIBRARIES( NativeException
