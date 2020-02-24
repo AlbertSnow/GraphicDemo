@@ -2,10 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.albertsnow.graphicdemo">
 
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:glEsVersion="0x00020000" android:required="true" />
+
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
 
     <application
         android:name=".MyApplication"
@@ -16,6 +18,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".widget.WidgetActivity"
+            android:label="@string/title_activity_widget"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
             android:name=".home.HomeActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar">
@@ -25,22 +31,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".MainActivity"/>
-        <activity android:name=".SecondActivity"/>
-        <activity android:name=".jni.exception.ExceptionActivity"/>
-        <activity android:name=".opengl.MultiTextureActivity"/>
-        <activity android:name=".opengl.transform.TransformActivity"/>
-        <activity android:name=".camera.CameraActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
-
+        <activity android:name=".MainActivity" />
+        <activity android:name=".SecondActivity" />
+        <activity android:name=".jni.exception.ExceptionActivity" />
+        <activity android:name=".opengl.MultiTextureActivity" />
+        <activity android:name=".opengl.transform.TransformActivity" />
+        <activity
+            android:name=".camera.CameraActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".opengl.OpenGLActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
-        <activity android:name=".opengl.QuickSurfaceActivity"
-            />
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".opengl.QuickSurfaceActivity" />
     </application>
 
 </manifest>

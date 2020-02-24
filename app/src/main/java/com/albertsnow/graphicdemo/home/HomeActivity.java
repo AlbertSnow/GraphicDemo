@@ -12,6 +12,7 @@ import android.widget.ListView;
 import com.albertsnow.graphicdemo.MainActivity;
 import com.albertsnow.graphicdemo.R;
 import com.albertsnow.graphicdemo.jni.exception.ExceptionActivity;
+import com.albertsnow.graphicdemo.widget.WidgetActivity;
 
 public class HomeActivity extends ListActivity {
 
@@ -35,6 +36,9 @@ public class HomeActivity extends ListActivity {
                 break;
             case 1:
                 intent.setClass(this, ExceptionActivity.class);
+                break;
+            case 2:
+                intent.setClass(this, WidgetActivity.class);
                 break;
                 default:
                     throw new IllegalStateException("未注册点击");
