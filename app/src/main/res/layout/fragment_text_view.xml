@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".widget.WidgetActivity"
+    tools:showIn="@layout/activity_widget"
+
+
+    android:paddingLeft="20dp"
+    android:paddingTop="20dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="20dp">
+
+    <ImageView
+        android:id="@+id/widget_image_holder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/document_word_icon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/widget_test_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginBottom="2dp"
+        android:gravity="center_vertical"
+        android:textColor="#FF333333"
+        android:textSize="14dp"
+        android:maxLines="1"
+        app:layout_constraintLeft_toRightOf="@id/widget_image_holder"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="C://document/hello/everythingC://document/heverythingC://document/heverythingC://document/heverythingC://document/hello/everythingC://document/hello/everythingC://document/hello/everythingC://document/hello/everything" />
+
+
+
+</android.support.constraint.ConstraintLayout>

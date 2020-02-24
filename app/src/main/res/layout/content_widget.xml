@@ -8,4 +8,12 @@
     tools:context=".widget.WidgetActivity"
     tools:showIn="@layout/activity_widget">
 
+    <FrameLayout
+        android:id="@+id/widget_content_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        />
+
+
 </android.support.constraint.ConstraintLayout>
