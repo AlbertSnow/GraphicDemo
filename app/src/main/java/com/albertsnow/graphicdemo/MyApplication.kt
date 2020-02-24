@@ -15,4 +15,9 @@ class MyApplication : Application() {
         var application: Context? = null
     }
 
+    override fun onCreate() {
+        super.onCreate()
+        com.albertsnow.graphicdemo.jni.TestJNI().seeHello()
+    }
+
 }

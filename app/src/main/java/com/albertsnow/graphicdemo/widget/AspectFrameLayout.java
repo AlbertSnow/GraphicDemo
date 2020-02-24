@@ -17,6 +17,7 @@
 package com.albertsnow.graphicdemo.widget;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -100,4 +101,10 @@ public class AspectFrameLayout extends FrameLayout {
         //        "] height=[" + View.MeasureSpec.toString(heightMeasureSpec) + "]");
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+    }
+
 }
