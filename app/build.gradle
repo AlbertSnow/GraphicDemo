@@ -31,6 +31,10 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
+//
+//    viewBinding {
+//        enabled = true
+//    }
 
     externalNativeBuild {
         cmake {

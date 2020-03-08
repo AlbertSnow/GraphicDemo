@@ -25,6 +25,7 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class TextViewFragment : BaseFragment() {
+    private lateinit var mRootView: View
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -41,8 +42,21 @@ class TextViewFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_text_view, container, false)
+        mRootView = inflater.inflate(R.layout.fragment_text_view, container, false)
+        return mRootView
     }
+
+
+    override fun onResume() {
+        super.onResume()
+        TextViewManager.handleTextView(mRootView.findViewById(R.id.widget_test_text_view))
+    }
+
+
+
+
+
+
 
     // TODO: Rename method, update argument and hook method into UI event
     fun onButtonPressed(uri: Uri) {

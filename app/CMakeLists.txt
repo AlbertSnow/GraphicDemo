@@ -30,3 +30,11 @@ add_library(test_jni
 TARGET_LINK_LIBRARIES( test_jni
         log
         )
+
+
+add_library(my_looper
+        SHARED
+        ${SOURCE_DIR}/loop/MyLooper.cpp
+        )
+TARGET_LINK_LIBRARIES(my_looper
+        log)
