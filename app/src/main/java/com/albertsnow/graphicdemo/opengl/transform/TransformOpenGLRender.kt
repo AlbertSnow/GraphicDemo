@@ -12,7 +12,8 @@ import com.albertsnow.graphicdemo.opengl.shape.Triangle
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class TransformOpenGLRender(context: Context, program: AbsOpenGLProgram = OpenglProgram(textureResourceID = R.drawable.fix_motor))
+class TransformOpenGLRender(context: Context, program: AbsOpenGLProgram =
+        OpenglProgram(textureResourceID = R.drawable.fix_motor))
     : OpenGLRender(context, program){
 
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {

@@ -8,7 +8,8 @@ import com.albertsnow.graphicdemo.opengl.shape.Triangle
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-open class OpenGLRender(var context: Context, val program: AbsOpenGLProgram = OpenglProgram()) : GLSurfaceView.Renderer {
+open class OpenGLRender(var context: Context,
+                        val program: AbsOpenGLProgram = OpenglProgram()) : GLSurfaceView.Renderer {
 
     lateinit var size : Vec2F
 
@@ -22,7 +23,8 @@ open class OpenGLRender(var context: Context, val program: AbsOpenGLProgram = Op
 
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f)
-        Matrix.setLookAtM(viewMatrix.data, 0, 0f, 0f, -3f, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+        Matrix.setLookAtM(viewMatrix.data, 0, 0f, 0f, -3f,
+                0f, 0f, 0f, 0f, 1.0f, 0.0f);
         program.initProgram(context)
     }
 
@@ -36,7 +38,8 @@ open class OpenGLRender(var context: Context, val program: AbsOpenGLProgram = Op
         size = Vec2F(floatArrayOf(width.toFloat(), height.toFloat()))
 
         val ratio: Float = mWidth.toFloat() / mHeight.toFloat()
-        Matrix.frustumM(projectionMatrix.data, 0, -ratio, ratio, -1f, 1f, 3f, 7f)
+        Matrix.frustumM(projectionMatrix.data, 0, -ratio, ratio, -1f,
+                1f, 3f, 7f)
 
 
         mTriangle = Triangle()
@@ -46,7 +49,8 @@ open class OpenGLRender(var context: Context, val program: AbsOpenGLProgram = Op
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT)
 
 //        // Set the camera position (View matrix)
-        Matrix.setLookAtM(viewMatrix.data, 0, 0f, 0f, -3f, 0f, 0f, 0f, 0f, 1.0f, 0.0f)
+        Matrix.setLookAtM(viewMatrix.data, 0, 0f, 0f, -3f,
+                0f, 0f, 0f, 0f, 1.0f, 0.0f)
 
         program.draw(projectionMatrix = projectionMatrix,
                 viewMatrix = viewMatrix,

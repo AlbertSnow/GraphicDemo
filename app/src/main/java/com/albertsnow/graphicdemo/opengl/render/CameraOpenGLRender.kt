@@ -20,7 +20,8 @@ class CameraOpenGLRender(var context: Context, val program: CameraTextureGLProgr
 
      fun onSurfaceCreated() {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f)
-         Matrix.setLookAtM(cameraMatrix.data, 0, 0f, 0f, -3f, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+         Matrix.setLookAtM(cameraMatrix.data, 0, 0f, 0f, -3f,
+                 0f, 0f, 0f, 0f, 1.0f, 0.0f);
         GlUtil.checkGlError("setLookAtM")
         program.initProgram(context)
     }
@@ -35,7 +36,8 @@ class CameraOpenGLRender(var context: Context, val program: CameraTextureGLProgr
         size = Vec2F(floatArrayOf(width.toFloat(), height.toFloat()))
 
         val ratio: Float = mWidth.toFloat() / mHeight.toFloat()
-        Matrix.frustumM(projectionMatrix.data, 0, -ratio, ratio, -1f, 1f, 3f, 7f)
+        Matrix.frustumM(projectionMatrix.data, 0, -ratio, ratio,
+                -1f, 1f, 3f, 7f)
 
         val magicCode = 180
         Matrix.rotateM(projectionMatrix.data, 0, cameraRotation + magicCode, 0f, 0f, 1f)

@@ -103,7 +103,8 @@ class CameraTextureGLProgram : AbsOpenGLProgram() {
                 floatArrayOf(1.0f, -1.0f, 0.01f)
         )
         val cube_vertices_buffer = FloatBuffer.wrap(flatten(cube_vertices))
-        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, cube_vertices_buffer.limit() * 4, cube_vertices_buffer, GLES20.GL_DYNAMIC_DRAW)
+        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER,
+                cube_vertices_buffer.limit() * 4, cube_vertices_buffer, GLES20.GL_DYNAMIC_DRAW)
 
 
         //bottom-left is (0,0)
@@ -116,7 +117,8 @@ class CameraTextureGLProgram : AbsOpenGLProgram() {
                 0f, 1f
         )
         val texture_buffer = FloatBuffer.wrap(cubeTextureCoordinateData)
-        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, texture_buffer.limit() * 4, texture_buffer, GLES20.GL_DYNAMIC_DRAW)
+        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER,
+                texture_buffer.limit() * 4, texture_buffer, GLES20.GL_DYNAMIC_DRAW)
 
 
         index_buffer = generateOneBuffer()
@@ -125,7 +127,8 @@ class CameraTextureGLProgram : AbsOpenGLProgram() {
                 shortArrayOf(2, 1, 0, 0, 3, 2)
         )
         val cube_faces_buffer = ShortBuffer.wrap(flatten(cube_faces))
-        GLES20.glBufferData(GLES20.GL_ELEMENT_ARRAY_BUFFER, cube_faces_buffer.limit() * 2, cube_faces_buffer, GLES20.GL_STATIC_DRAW)
+        GLES20.glBufferData(GLES20.GL_ELEMENT_ARRAY_BUFFER,
+                cube_faces_buffer.limit() * 2, cube_faces_buffer, GLES20.GL_STATIC_DRAW)
 
         overlayTextureId = createResourceTexture(R.drawable.flower)
         externalTextureId = createExternalTexture()
@@ -137,19 +140,24 @@ class CameraTextureGLProgram : AbsOpenGLProgram() {
     private var screenHeight: Int = 0
 
 
-    override fun draw(projectionMatrix: Matrix44F, cameraview: Matrix44F, modelMatrix: Matrix44F, size: Vec2F) {
+    override fun draw(projectionMatrix: Matrix44F, cameraview: Matrix44F,
+                      modelMatrix: Matrix44F, size: Vec2F) {
         GLES20.glUseProgram(programPointer)
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vertex_coord_buffer)
         GLES20.glEnableVertexAttribArray(vertex_coord_location)
-        GLES20.glVertexAttribPointer(vertex_coord_location, 3, GLES20.GL_FLOAT, false, 0, 0)
+        GLES20.glVertexAttribPointer(vertex_coord_location, 3, GLES20.GL_FLOAT,
+                false, 0, 0)
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, texture_coord_buffer)
         GLES20.glEnableVertexAttribArray(texture_coord_location)
-        GLES20.glVertexAttribPointer(texture_coord_location, 2, GLES20.GL_FLOAT, false, 0, 0)
+        GLES20.glVertexAttribPointer(texture_coord_location, 2, GLES20.GL_FLOAT,
+                false, 0, 0)
 
-        GLES20.glUniformMatrix4fv(camera_matrix_location, 1, false, cameraview.data, 0)
-        GLES20.glUniformMatrix4fv(project_matrix_location, 1, false, projectionMatrix.data, 0)
+        GLES20.glUniformMatrix4fv(camera_matrix_location, 1, false,
+                cameraview.data, 0)
+        GLES20.glUniformMatrix4fv(project_matrix_location, 1, false,
+                projectionMatrix.data, 0)
 
         GlUtil.checkGlError("camera_matrix_location project_matrix_location")
 
@@ -170,14 +178,16 @@ class CameraTextureGLProgram : AbsOpenGLProgram() {
             val pixels = IntBuffer.allocate(screenWidth * screenHeight)
 
             val startTime = System.currentTimeMillis()
-            GLES20.glReadPixels(0, 0, screenWidth, screenHeight, GLES20.GL_RGBA,  GLES20.GL_UNSIGNED_BYTE,  pixels )
+            GLES20.glReadPixels(0, 0, screenWidth, screenHeight, GLES20.GL_RGBA,
+                    GLES20.GL_UNSIGNED_BYTE,  pixels )
             Log.i("TimeCast", "cast: " + (System.currentTimeMillis() - startTime))
 
 
             val castStartTime = System.currentTimeMillis()
             val stitchBmp = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.ARGB_8888)
             stitchBmp.copyPixelsFromBuffer(pixels)
-            Log.i("TimeCast", "castStartTime: " + (System.currentTimeMillis() - castStartTime))
+            Log.i("TimeCast", "castStartTime: " +
+                    (System.currentTimeMillis() - castStartTime))
 
             callback?.onCapture(stitchBmp)
         }

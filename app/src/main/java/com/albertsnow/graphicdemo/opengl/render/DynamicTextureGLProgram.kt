@@ -80,7 +80,8 @@ class DynamicTextureGLProgram : AbsOpenGLProgram() {
                 floatArrayOf(-1.0f / 2, 1.0f / 2, 0.01f / 2)
         )
         val cube_vertices_buffer = FloatBuffer.wrap(flatten(cube_vertices))
-        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, cube_vertices_buffer.limit() * 4, cube_vertices_buffer, GLES20.GL_DYNAMIC_DRAW)
+        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, cube_vertices_buffer.limit() * 4,
+                cube_vertices_buffer, GLES20.GL_DYNAMIC_DRAW)
 
 
         //bottom-left is (0,0)
@@ -93,7 +94,8 @@ class DynamicTextureGLProgram : AbsOpenGLProgram() {
                 0f, 1f
         )
         val texture_buffer = FloatBuffer.wrap(cubeTextureCoordinateData)
-        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, texture_buffer.limit() * 4, texture_buffer, GLES20.GL_DYNAMIC_DRAW)
+        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, texture_buffer.limit() * 4, texture_buffer,
+                GLES20.GL_DYNAMIC_DRAW)
 
 
         index_buffer = generateOneBuffer()
@@ -102,23 +104,29 @@ class DynamicTextureGLProgram : AbsOpenGLProgram() {
                 shortArrayOf(2, 1, 0, 0, 3, 2)
         )
         val cube_faces_buffer = ShortBuffer.wrap(flatten(cube_faces))
-        GLES20.glBufferData(GLES20.GL_ELEMENT_ARRAY_BUFFER, cube_faces_buffer.limit() * 2, cube_faces_buffer, GLES20.GL_STATIC_DRAW)
+        GLES20.glBufferData(GLES20.GL_ELEMENT_ARRAY_BUFFER, cube_faces_buffer.limit() * 2,
+                cube_faces_buffer, GLES20.GL_STATIC_DRAW)
     }
 
 
-    override fun draw(projectionMatrix: Matrix44F, cameraview: Matrix44F, modelMatrix: Matrix44F, size: Vec2F) {
+    override fun draw(projectionMatrix: Matrix44F, cameraview: Matrix44F,
+                      modelMatrix: Matrix44F, size: Vec2F) {
         GLES20.glUseProgram(programPointer)
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vertex_coord_buffer)
         GLES20.glEnableVertexAttribArray(vertex_coord_location)
-        GLES20.glVertexAttribPointer(vertex_coord_location, 3, GLES20.GL_FLOAT, false, 0, 0)
+        GLES20.glVertexAttribPointer(vertex_coord_location, 3, GLES20.GL_FLOAT,
+                false, 0, 0)
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, texture_coord_buffer)
         GLES20.glEnableVertexAttribArray(texture_coord_location)
-        GLES20.glVertexAttribPointer(texture_coord_location, 2, GLES20.GL_FLOAT, false, 0, 0)
+        GLES20.glVertexAttribPointer(texture_coord_location, 2, GLES20.GL_FLOAT,
+                false, 0, 0)
 
-        GLES20.glUniformMatrix4fv(camera_matrix_location, 1, false, cameraview.data, 0)
-        GLES20.glUniformMatrix4fv(project_matrix_location, 1, false, projectionMatrix.data, 0)
+        GLES20.glUniformMatrix4fv(camera_matrix_location, 1, false,
+                cameraview.data, 0)
+        GLES20.glUniformMatrix4fv(project_matrix_location, 1, false,
+                projectionMatrix.data, 0)
 
         handleTexture()
 
