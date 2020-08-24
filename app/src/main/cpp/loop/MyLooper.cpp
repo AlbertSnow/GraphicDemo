@@ -30,58 +30,58 @@ static const int EPOLL_MAX_EVENTS = 16;
 int epfd;
 
 int init(JNIEnv* /*env*/, jobject /*thiz*/) {
-//    epfd = epoll_create1(EPOLL_CLOEXEC);
-//
-//    if (epfd < 0) {
-//        ALOGE("epoll_create1");
-//    }
-//
-//
-//    int tmp_fd = open("/sdcard/testEpoll.txt",O_RDWR);
-//
-//
-//    struct epoll_event eventItem;
-//    memset(& eventItem, 0, sizeof(epoll_event)); // zero out unused members of data field union
-//    eventItem.events = EPOLLIN;
-//    eventItem.data.fd = tmp_fd;
-//    int result = epoll_ctl(epfd, EPOLL_CTL_ADD, tmp_fd, & eventItem);
-//
-//    return result;
+    epfd = epoll_create1(EPOLL_CLOEXEC);
+
+    if (epfd < 0) {
+        ALOGE("epoll_create1");
+    }
+
+
+    int tmp_fd = open("/sdcard/testEpoll.txt", O_RDWR);
+
+
+    struct epoll_event eventItem;
+    memset(& eventItem, 0, sizeof(epoll_event)); // zero out unused members of data field union
+    eventItem.events = EPOLLIN;
+    eventItem.data.fd = tmp_fd;
+    int result = epoll_ctl(epfd, EPOLL_CTL_ADD, tmp_fd, & eventItem);
 
     ALOGI("mylooper init");
-    return 0;
-
+    return result;
 }
 
 int loopNext(JNIEnv* /*env*/, jobject /*thiz*/, int timeOut) {
 
-//    struct epoll_event events[EPOLL_MAX_EVENTS];
-//
-//    if (!events) {
-//        ALOGE("malloc");
-//        return 1;
-//    }
-//
-//    int eventCount = epoll_wait(epfd, events, EPOLL_MAX_EVENTS, timeOut);
-//
-//    if (eventCount < 0) {
-//        ALOGE("epoll_wait");
-//        free(events);
-//        return 1;
-//    }
-//
-//
-//    // Check for poll timeout.
-//    if (eventCount == 0) {
-//        ALOGI("epoll timeout");
-//    }
-//
-//
-//    for (int i = 0; i < eventCount; ++i) {
-//        ALOGI("event=%d on fd=%d\n",
-//                events[i].events,
+    struct epoll_event events[EPOLL_MAX_EVENTS];
+
+    if (!events) {
+        ALOGE("malloc");
+        return 1;
+    }
+
+    ALOGI("mylooper epoll_wait");
+
+    int eventCount = epoll_wait(epfd, events, EPOLL_MAX_EVENTS, timeOut);
+
+    ALOGI("mylooper epoll_wait go");
+
+    if (eventCount < 0) {
+        ALOGE("epoll_wait");
+        free(events);
+        return 1;
+    }
+
+
+    // Check for poll timeout.
+    if (eventCount == 0) {
+        ALOGI("epoll timeout");
+    }
+
+
+    for (int i = 0; i < eventCount; ++i) {
+//        ALOGI("event=%d on fd=%d\n" + events[i].events,
 //                events[i].data.fd);
-//    }
+    }
     ALOGI("mylooper loopNext");
 
     return 0;

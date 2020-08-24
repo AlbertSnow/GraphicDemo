@@ -12,13 +12,13 @@ object LooperManager {
 
             val myLooper =  MyLooper()
             myLooper.init()
-            myLooper.wait(60 * 100)
+            myLooper.wait(60 * 1000)
 
             Log.i(TAG, "looper finish")
 
         }
         testThread.name = "MyLooperTest"
-        testThread.run()
+        testThread.start()
     }
 
 }

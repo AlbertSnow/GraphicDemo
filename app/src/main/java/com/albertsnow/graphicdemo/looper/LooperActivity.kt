@@ -30,7 +30,7 @@ class LooperActivity : AppCompatActivity() {
 
     fun createFile(view: View) {
         val file = File("/sdcard/testEpoll.txt")
-        if (file.exists())
+        if (!file.exists())
             file.createNewFile()
 
         file.writeText("Hello World")
