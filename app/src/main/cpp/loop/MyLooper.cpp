@@ -13,7 +13,7 @@
 #include <jni.h>
 #include <android/log.h>
 
-#define LOG_TAG "simplejni native.cpp"
+#define LOG_TAG "MyLooper"
 #define ALOGV(...) __android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, __VA_ARGS__)
 #define ALOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 #define ALOGI(...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
