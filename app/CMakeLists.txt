@@ -35,7 +35,7 @@ TARGET_LINK_LIBRARIES( test_jni
 add_library(my_looper
         SHARED
         ${SOURCE_DIR}/loop/MyLooper.cpp
-#        ${SOURCE_DIR}/com_albertsnow_graphicdemo_looper_MyLooper.cpp
+        ${SOURCE_DIR}/com_albertsnow_graphicdemo_looper_MyLooper.cpp
         )
 TARGET_LINK_LIBRARIES(my_looper
         log)
