@@ -3,7 +3,10 @@ cmake_minimum_required(VERSION 3.4.1)
 
 project(NativeException)
 
-set(SOURCE_DIR /Users/apple/WorkSpace/GraphicDemo/app/src/main/cpp)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -static-libstdc++")
+set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
+set(SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/main/cpp")
 
 INCLUDE_DIRECTORIES(${SOURCE_DIR})
 LINK_DIRECTORIES(${SOURCE_DIR})
@@ -24,7 +27,7 @@ TARGET_LINK_LIBRARIES( NativeException
 
 add_library(test_jni
         SHARED
-        ${SOURCE_DIR}/com_albertsnow_graphicdemo_jni_TestJni.cpp
+        ${SOURCE_DIR}/com_albertsnow_graphicdemo_jni_TestJNI.cpp
         )
 
 TARGET_LINK_LIBRARIES( test_jni

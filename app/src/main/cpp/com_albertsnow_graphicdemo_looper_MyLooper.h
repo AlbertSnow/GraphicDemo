@@ -2,11 +2,10 @@
 // Created by Apple on 2019-09-26.
 //
 
-#ifndef GRAPHICDEMO_TESTEXCEPTION_H
-#define GRAPHICDEMO_TESTEXCEPTION_H
+#ifndef INCLUDE_MYLOOPER_H
+#define INCLUDE_MYLOOPER_H
 
 
-#include <jni.h>
 #include <jni.h>
 
 #ifdef __cplusplus
