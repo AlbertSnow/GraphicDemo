@@ -15,6 +15,7 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.AdapterView
@@ -59,8 +60,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onResume() {
         super.onResume()
+        Log.i("Activity", "MainActivity onResume");
+
         requestPermission()
-        CVPictureUtils.testMainMethod();
     }
 
     private fun initView() {
@@ -154,7 +156,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 ActivityCompat.requestPermissions(this,
                         arrayOf(Manifest.permission.CAMERA),
                         REQUEST_CODE_CAMERA
-                        )
+                )
 
                 // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
                 // app-defined int constant. The callback method gets the

@@ -13,6 +13,7 @@ import com.albertsnow.graphicdemo.MainActivity;
 import com.albertsnow.graphicdemo.R;
 import com.albertsnow.graphicdemo.jni.exception.ExceptionActivity;
 import com.albertsnow.graphicdemo.looper.LooperActivity;
+import com.albertsnow.graphicdemo.opencv.OpenCVActivity;
 import com.albertsnow.graphicdemo.widget.WidgetActivity;
 
 public class HomeActivity extends ListActivity {
@@ -36,12 +37,15 @@ public class HomeActivity extends ListActivity {
                 intent.setClass(this, MainActivity.class);
                 break;
             case 1:
-                intent.setClass(this, ExceptionActivity.class);
+                intent.setClass(this, OpenCVActivity.class);
                 break;
             case 2:
-                intent.setClass(this, WidgetActivity.class);
+                intent.setClass(this, ExceptionActivity.class);
                 break;
             case 3:
+                intent.setClass(this, WidgetActivity.class);
+                break;
+            case 4:
                 intent.setClass(this, LooperActivity.class);
                 break;
                 default:

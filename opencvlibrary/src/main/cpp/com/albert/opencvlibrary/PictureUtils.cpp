@@ -13,7 +13,9 @@ using namespace cv;
 int main(void)
 {
     printf("Hello world.");
-    const char* picturePath = "/sdcard/Test.jpg";
+    //The file on apk assets
+    const char* picturePath = "/sdcard/OpenCvTest/test.png";
+    const char* writePath = "/sdcard/OpenCvTest/testGray.jpg";
 
     int fd = open(picturePath, O_RDONLY);
     if (fd == -1) {
@@ -25,11 +27,13 @@ int main(void)
 
 
     Mat img = imread(picturePath);
-    Scalar intensity = img.at<uchar>(1, 2);
+    Mat dest(img.rows, img.cols, CV_8UC1);
+    cvtColor(img, dest, COLOR_BGR2GRAY);
 
-    uchar blue = intensity.val[0];
-    uchar green = intensity.val[1];
-    uchar red = intensity.val[2];
+    imwrite(writePath, dest);
+
+
+
     printf("-------- Every body see that --------");
 
     return 0;

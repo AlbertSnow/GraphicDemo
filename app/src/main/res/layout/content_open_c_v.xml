@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".opencv.OpenCVActivity">
+
+    <ProgressBar
+        android:id="@+id/cvProgress"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="20dp"
+        android:layout_marginTop="40dp"
+        android:orientation="vertical">
+
+
+        <Button
+            android:id="@+id/cvGray"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="toGray"
+            android:text="2Gray"/>
+
+        <Button
+            android:id="@+id/cvLine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:onClick="toLine"
+            android:text="2Line" />
+
+    </LinearLayout>
+</FrameLayout>
