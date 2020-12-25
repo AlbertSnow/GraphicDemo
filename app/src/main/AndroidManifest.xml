@@ -39,6 +39,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.albertsnow.graphicdemo.widget.scroll.MultiScrollActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="landscape"
+            />
         <activity android:name=".MainActivity" />
         <activity android:name=".SecondActivity" />
         <activity android:name=".jni.exception.ExceptionActivity" />
