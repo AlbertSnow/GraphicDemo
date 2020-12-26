@@ -50,10 +50,9 @@ int init(JNIEnv* /*env*/, jobject /*thiz*/) {
         ALOGE("error (errno=%d)", errno); //EBADF
     }
 
-    return result;
 }
 
-int loopNext(JNIEnv* /*env*/, jobject /*thiz*/, int timeOut) {
+int loopNext(JNIEnv * /*env*/, jobject /*thiz*/, int timeOut) {
 
     struct epoll_event events[EPOLL_MAX_EVENTS];
 

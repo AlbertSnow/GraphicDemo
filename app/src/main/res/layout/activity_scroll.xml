@@ -29,10 +29,10 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         >
-        <ImageView
+        <com.albertsnow.graphicdemo.widget.scroll.TouchScaleImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/device"
+            android:src="@drawable/small_drawable"
             />
     </RelativeLayout>
 
