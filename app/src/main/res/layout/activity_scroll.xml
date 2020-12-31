@@ -9,31 +9,30 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        >
-        <com.albertsnow.graphicdemo.widget.scroll.TouchScaleImageView
+        android:layout_weight="1">
+
+        <com.albertsnow.graphicdemo.widget.scroll.FitWidthScaleImageView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/device"
-            />
+            android:layout_height="match_parent"
+            android:src="@drawable/device" />
     </RelativeLayout>
 
     <View
         android:layout_width="20dp"
         android:layout_height="match_parent"
-        android:background="@android:color/holo_red_light"
-        />
+        android:background="@android:color/holo_red_light" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        >
-        <com.albertsnow.graphicdemo.widget.scroll.TouchScaleImageView
+        android:layout_weight="1">
+
+        <com.albertsnow.graphicdemo.widget.scroll.FitWidthScaleImageView
+            android:id="@+id/scroll_image"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/small_drawable"
-            />
+            android:layout_height="match_parent"
+            android:src="@drawable/small_drawable" />
+
     </RelativeLayout>
 
 

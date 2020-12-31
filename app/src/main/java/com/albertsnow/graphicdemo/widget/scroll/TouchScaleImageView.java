@@ -56,8 +56,14 @@ public class TouchScaleImageView extends android.support.v7.widget.AppCompatImag
         sharedConstructing(context);
     }
 
+    public TouchScaleImageView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        sharedConstructing(context);
+    }
+
     public interface OnScaleCallback {
         void onScale();
+        void onScaleEnd();
     }
 
     public void setScaleCallback(OnScaleCallback callback) {
@@ -178,6 +184,15 @@ public class TouchScaleImageView extends android.support.v7.widget.AppCompatImag
             onTouchScaling();
             return true;
         }
+
+        @Override
+        public void onScaleEnd(ScaleGestureDetector detector) {
+            super.onScaleEnd(detector);
+
+            if (mScaleCallback != null) {
+                mScaleCallback.onScaleEnd();
+            }
+        }
     }
 
     void fixTrans() {
@@ -239,26 +254,35 @@ public class TouchScaleImageView extends android.support.v7.widget.AppCompatImag
             Drawable drawable = getDrawable();
             if (drawable == null || drawable.getIntrinsicWidth() == 0 || drawable.getIntrinsicHeight() == 0)
                 return;
-            int bmWidth = drawable.getIntrinsicWidth();
-            int bmHeight = drawable.getIntrinsicHeight();
-            float scaleX = (float) viewWidth / (float) bmWidth;
-            float scaleY = (float) viewHeight / (float) bmHeight;
-            scale = Math.min(scaleX, scaleY);
-            mImgMatrix.setScale(scale, scale);
-
-            // Center the image
-            float redundantYSpace = (float) viewHeight - (scale * (float) bmHeight);
-            float redundantXSpace = (float) viewWidth - (scale * (float) bmWidth);
-            redundantYSpace /= (float) 2;
-            redundantXSpace /= (float) 2;
-
-            mImgMatrix.postTranslate(redundantXSpace, redundantYSpace);
-
-            origWidth = viewWidth - 2 * redundantXSpace;
-            origHeight = viewHeight - 2 * redundantYSpace;
-            setImageMatrix(mImgMatrix);
+            doInitScale(drawable);
         }
         fixTrans();
+    }
+
+    /**
+     * 设置Image初始化时的效果
+     * @param drawable
+     */
+    protected void doInitScale(Drawable drawable) {
+        float scale;
+        int bmWidth = drawable.getIntrinsicWidth();
+        int bmHeight = drawable.getIntrinsicHeight();
+        float scaleX = (float) viewWidth / (float) bmWidth;
+        float scaleY = (float) viewHeight / (float) bmHeight;
+        scale = Math.min(scaleX, scaleY);
+        mImgMatrix.setScale(scale, scale);
+
+        // Center the image
+        float redundantYSpace = (float) viewHeight - (scale * (float) bmHeight);
+        float redundantXSpace = (float) viewWidth - (scale * (float) bmWidth);
+        redundantYSpace /= (float) 2;
+        redundantXSpace /= (float) 2;
+
+        mImgMatrix.postTranslate(redundantXSpace, redundantYSpace);
+
+        origWidth = viewWidth - 2 * redundantXSpace;
+        origHeight = viewHeight - 2 * redundantYSpace;
+        setImageMatrix(mImgMatrix);
     }
 
 
