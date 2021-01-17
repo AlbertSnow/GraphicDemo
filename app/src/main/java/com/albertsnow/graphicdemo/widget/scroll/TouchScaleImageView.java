@@ -117,7 +117,6 @@ public class TouchScaleImageView extends android.support.v7.widget.AppCompatImag
                     int yDiff = (int) Math.abs(curr.y - start.y);
                     if (xDiff < mTouchSlop && yDiff < mTouchSlop)
                         if (!executeClickAction(curr.x, curr.y)) {
-                            //点击无菜单时候才执行click操作
                             performClick();
                         }
                     break;

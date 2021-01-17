@@ -41,7 +41,11 @@ int main(void)
     cdstP = cdst.clone();
 
     vector<Vec2f> lines;
-    HoughLines(dst, lines, 1, CV_PI / 180, 150, 0, 0);
+    HoughLines(dst, lines, 1, CV_PI / 180, 50, 0, 0);
+
+
+    logStr("lines number: " );
+    logInt(lines.size());
 
     for (size_t i =0; i < lines.size(); i++) {
         float rho = lines[i][0], theta = lines[i][1];
@@ -56,11 +60,11 @@ int main(void)
     }
 
     if (cdst.empty()) {
-        printf("--__- hough line is empty");
+        logStr("--__- hough line is empty");
     } else {
         imwrite(writePath, cdst);
     }
-    printf("-------- Every body see that --------");
+    logStr("-------- Every body see that --------");
 
     return 0;
 }
