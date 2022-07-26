@@ -1,8 +1,6 @@
 package com.albert.opencvlibrary;
 
 public class CVPictureUtils {
-
-
     static {
         System.loadLibrary("graphic");
     }
@@ -12,5 +10,4 @@ public class CVPictureUtils {
     }
 
     private static native void nativeMainMethod();
-
 }

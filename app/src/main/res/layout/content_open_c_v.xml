@@ -18,6 +18,11 @@
         android:layout_marginTop="40dp"
         android:orientation="vertical">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1. Push picture to /sdcard/OpenCvTest/test.png \n2. press 2GRAY button, do HoughLines test, and draw the line \n3.Generate /sdcard/OpenCvTest/test.png "
+            />
 
         <Button
             android:id="@+id/cvGray"
@@ -25,14 +30,6 @@
             android:layout_height="wrap_content"
             android:onClick="toGray"
             android:text="2Gray"/>
-
-        <Button
-            android:id="@+id/cvLine"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:onClick="toLine"
-            android:text="2Line" />
 
     </LinearLayout>
 </FrameLayout>

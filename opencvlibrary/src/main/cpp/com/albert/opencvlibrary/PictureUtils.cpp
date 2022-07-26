@@ -2,7 +2,7 @@
 // Created by Apple on 2019-08-02.
 //
 
-                                                                                                             #include <cstdio>
+#include <cstdio>
 #include <opencv2/opencv.hpp>
 #include <jni.h>
 #include <fcntl.h>
@@ -11,12 +11,11 @@
 using namespace cv;
 using namespace std;
 
-int main(void)
-{
+int main(void) {
     printf("Hello world.");
     //The file on apk assets
-    const char* picturePath = "/sdcard/OpenCvTest/test.png";
-    const char* writePath = "/sdcard/OpenCvTest/testGray.jpg";
+    const char *picturePath = "/sdcard/OpenCvTest/test.png";
+    const char *writePath = "/sdcard/OpenCvTest/testGray.jpg";
 
     int fd = open(picturePath, O_RDONLY);
     if (fd == -1) {
@@ -26,10 +25,8 @@ int main(void)
         logStr("+++++++++++++ File access +++++++++++++");
     }
 
-
     Mat dst, cdst, cdstP;
-
-    Mat src = imread(picturePath,IMREAD_GRAYSCALE);
+    Mat src = imread(picturePath, IMREAD_GRAYSCALE);
 
     if (src.empty()) {
         logStr("Load picture empty");
@@ -43,33 +40,33 @@ int main(void)
     vector<Vec2f> lines;
     HoughLines(dst, lines, 1, CV_PI / 180, 50, 0, 0);
 
-
-    logStr("lines number: " );
+    logStr("lines number: ");
     logInt(lines.size());
 
-    for (size_t i =0; i < lines.size(); i++) {
+    for (size_t i = 0; i < lines.size(); i++) {
         float rho = lines[i][0], theta = lines[i][1];
         Point pt1, pt2;
         double a = cos(theta), b = sin(theta);
-        double x0 = a*rho, y0 = b*rho;
-        pt1.x = cvRound(x0 + 1000*(-b));
-        pt1.y = cvRound(y0 + 1000*(a));
-        pt2.x = cvRound(x0 - 1000*(-b));
-        pt2.y = cvRound(y0 - 1000*(a));
-        line( cdst, pt1, pt2, Scalar(0,0,255), 3, LINE_AA);
+        double x0 = a * rho, y0 = b * rho;
+        pt1.x = cvRound(x0 + 1000 * (-b));
+        pt1.y = cvRound(y0 + 1000 * (a));
+        pt2.x = cvRound(x0 - 1000 * (-b));
+        pt2.y = cvRound(y0 - 1000 * (a));
+        line(cdst, pt1, pt2, Scalar(0, 0, 255), 3, LINE_AA);
     }
 
     if (cdst.empty()) {
         logStr("--__- hough line is empty");
     } else {
+        logStr("-------- imwrite line --------");
         imwrite(writePath, cdst);
     }
-    logStr("-------- Every body see that --------");
+    logStr("-------- end --------");
 
     return 0;
 }
 
 extern "C" JNIEXPORT void JNICALL Java_com_albert_opencvlibrary_CVPictureUtils_nativeMainMethod
-        (JNIEnv * env, jclass clazz) {
+        (JNIEnv *env, jclass clazz) {
     main();
 }

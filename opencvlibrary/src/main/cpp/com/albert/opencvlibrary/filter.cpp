@@ -6,7 +6,6 @@
 
 using namespace cv;
 
-
 void medianBlur() {
 
     Mat *kernal = new Mat(3, 3, CV_16SC1);

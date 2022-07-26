@@ -5,8 +5,6 @@
 #ifndef GRAPHICDEMO_DEBUGUTILS_H
 #define GRAPHICDEMO_DEBUGUTILS_H
 
-
-
 void logStr(const char *str);
 
 void logInt(int intData);
