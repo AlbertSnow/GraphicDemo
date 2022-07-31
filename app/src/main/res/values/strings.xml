@@ -23,6 +23,7 @@
         <item>Native</item>
         <item>View</item>
         <item>Looper</item>
+        <item>Check Permission</item>
     </string-array>
     <string name="title_activity_widget">WidgetActivity</string>
 
