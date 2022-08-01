@@ -13,6 +13,10 @@
 #include <jni.h>
 #include <android/log.h>
 #include <errno.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <fcntl.h>
 
 #define LOG_TAG "MyLooper"
 #define ALOGV(...) __android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, __VA_ARGS__)
@@ -29,46 +33,80 @@ static const int EPOLL_SIZE_HINT = 8;
 static const int EPOLL_MAX_EVENTS = 16;
 
 int epfd;
+int tmp_fd;
+
+#define MAXLINE 5
+#define OPEN_MAX 100
+#define LISTENQ 20
+#define SERV_PORT 5000
+#define INFTIM 1000
 
 int init(JNIEnv* /*env*/, jobject /*thiz*/) {
     epfd = epoll_create1(EPOLL_CLOEXEC);
 
     if (epfd < 0) {
-        ALOGE("epoll_create1");
+        ALOGE("native epoll_create1 fail");
+    } else {
+        ALOGE("native epoll_create1 success");
     }
 
-    int tmp_fd = open("/sdcard/testEpoll.txt", O_RDWR);
+    tmp_fd = socket(AF_UNIX, SOCK_STREAM, 0);
+//    int tmp_fd = open("/sdcard/testEpoll.txt", O_RDWR);
 
-    struct epoll_event eventItem;
+    if (tmp_fd < 0) {
+        ALOGE("native tmp_fd fail");
+    } else {
+        ALOGE("native tmp_fd success");
+    }
+
+    struct epoll_event eventItem{};
     memset(& eventItem, 0, sizeof(epoll_event)); // zero out unused members of data field union
-    eventItem.events = EPOLLIN;
+    eventItem.events = EPOLLIN|EPOLLET;
     eventItem.data.fd = tmp_fd;
     int result = epoll_ctl(epfd, EPOLL_CTL_ADD, tmp_fd, & eventItem);
 
-    ALOGI("mylooper init, ctl add： %d", result);
+    ALOGI("native mylooper init, ctl add： %d", result);
     if (result < 0) {
-        ALOGE("error (errno=%d)", errno); //EBADF
+        ALOGE("native error (errno=%d)", errno); //EBADF
+    } else {
+        ALOGI("native mylooper init, ctl add： %d", result);
     }
 
+
+    struct sockaddr_in clientaddr;
+    struct sockaddr_in serveraddr;
+
+    bzero(&serveraddr, sizeof(serveraddr));
+    serveraddr.sin_family = AF_INET;
+    char *local_addr="127.0.0.1";
+    inet_aton(local_addr,&(serveraddr.sin_addr));//htons(portnumber);
+
+    serveraddr.sin_port=htons(1992);
+    bind(tmp_fd,(sockaddr *)&serveraddr, sizeof(serveraddr));
+    listen(tmp_fd, LISTENQ);
+//    maxi = 0;
+
+    return 0;
 }
 
 int loopNext(JNIEnv * /*env*/, jobject /*thiz*/, int timeOut) {
+    ALOGE("native loopNext start");
 
     struct epoll_event events[EPOLL_MAX_EVENTS];
 
-    if (!events) {
-        ALOGE("malloc");
-        return 1;
-    }
+//    if (!events) {
+//        ALOGE("native malloc");
+//        return 1;
+//    }
 
-    ALOGI("mylooper epoll_wait, epfd: %d", epfd);
+    ALOGI("native mylooper epoll_wait, epfd: %d", epfd);
 
     int eventCount = epoll_wait(epfd, events, EPOLL_MAX_EVENTS, timeOut);
 
-    ALOGI("mylooper epoll_wait, eventCount: %d", eventCount);
+    ALOGI("native mylooper epoll_wait, eventCount: %d", eventCount);
 
     if (eventCount < 0) {
-        ALOGE("epoll_wait");
+        ALOGE("native epoll_wait");
         free(events);
         return 1;
     }
@@ -76,15 +114,15 @@ int loopNext(JNIEnv * /*env*/, jobject /*thiz*/, int timeOut) {
 
     // Check for poll timeout.
     if (eventCount == 0) {
-        ALOGI("epoll timeout");
+        ALOGI("native epoll timeout");
     }
 
 
-    for (int i = 0; i < eventCount; ++i) {
+//    for (int i = 0; i < eventCount; ++i) {
 //        ALOGI("event=%d on fd=%d\n" + events[i].events,
 //                events[i].data.fd);
-    }
-    ALOGI("mylooper loopNext over");
+//    }
+    ALOGI("native mylooper loopNext over");
 
     return 0;
 }
@@ -120,11 +158,11 @@ int destroy() {
 //    jclass clazz;
 //    clazz = env->FindClass(className);
 //    if (clazz == NULL) {
-//        ALOGE("Native registration unable to find class '%s'", className);
+//        ALOGE("native Native registration unable to find class '%s'", className);
 //        return JNI_FALSE;
 //    }
 //    if (env->RegisterNatives(clazz, gMethods, numMethods) < 0) {
-//        ALOGE("RegisterNatives failed for '%s'", className);
+//        ALOGE("native RegisterNatives failed for '%s'", className);
 //        return JNI_FALSE;
 //    }
 //    return JNI_TRUE;
@@ -163,12 +201,12 @@ int destroy() {
 //
 //    ALOGI("JNI_OnLoad");
 //    if (vm->GetEnv(&uenv.venv, JNI_VERSION_1_4) != JNI_OK) {
-//        ALOGE("ERROR: GetEnv failed");
+//        ALOGE("native ERROR: GetEnv failed");
 ////        goto bail;
 //    }
 //    env = uenv.env;
 //    if (registerNatives(env) != JNI_TRUE) {
-//        ALOGE("ERROR: registerNatives failed");
+//        ALOGE("native ERROR: registerNatives failed");
 ////        goto bail;
 //    }
 //
